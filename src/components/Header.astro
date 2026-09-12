@@ -1,0 +1,205 @@
+---
+import BrandMark from './BrandMark.astro';
+import Icon from './Icon.astro';
+import {
+  useTranslations, path, navOrder, site, langShort, htmlLang, isZh,
+  type Lang,
+} from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  switcher: { lang: Lang; href: string }[];
+}
+const { lang, switcher } = Astro.props;
+const t = useTranslations(lang);
+const here = Astro.url.pathname.replace(/\/+$/, '') || '/';
+---
+
+<a class="skip-link" href="#main">{t('nav.skip')}</a>
+
+<header class="site-header">
+  <div class="shell shell--wide header-inner">
+    <a class="wordmark" href={path('home', lang)}>
+      <BrandMark size={44} />
+      <span class="wordmark-text">
+        <span class="wordmark-name">{isZh(lang) ? site.nameZh : site.name}</span>
+        <span class="wordmark-sub">
+          {isZh(lang) ? site.descriptorZh : 'Linda Chow, MA, CCC-SLP, BCBA'}
+        </span>
+      </span>
+    </a>
+
+    <input type="checkbox" id="nav-toggle" class="nav-toggle visually-hidden" />
+    <label for="nav-toggle" class="nav-burger">
+      <Icon name="menu" size={22} />
+      <span class="visually-hidden">{t('nav.menu')}</span>
+    </label>
+
+    <nav class="site-nav" aria-label={site.name}>
+      <ul class="nav-links">
+        {navOrder.map((key) => {
+          const href = path(key, lang);
+          const current = here === href || here.startsWith(href + '/');
+          return (
+            <li>
+              <a href={href} aria-current={current ? 'page' : undefined}>{t(`nav.${key}` as any)}</a>
+            </li>
+          );
+        })}
+      </ul>
+
+      <div class="nav-end">
+        <div class="lang-switch" role="group" aria-label={t('nav.langLabel')}>
+          <span class="lang-current" aria-current="true">{langShort[lang]}</span>
+          {switcher.map((s) => (
+            <a href={s.href} hreflang={htmlLang[s.lang]} lang={htmlLang[s.lang]}>{langShort[s.lang]}</a>
+          ))}
+        </div>
+        <a class="btn btn--primary btn--sm" href={path('contact', lang)}>{t('cta.connect')}</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 100;
+    background: color-mix(in srgb, var(--paper) 90%, transparent);
+    backdrop-filter: saturate(150%) blur(12px);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    min-height: var(--navh);
+    flex-wrap: wrap;
+  }
+
+  /* ---------------- wordmark ---------------- */
+  .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: .7rem;
+    text-decoration: none;
+    color: var(--ink);
+    flex: 0 0 auto;
+  }
+  .wordmark-text { display: flex; flex-direction: column; line-height: 1.15; }
+  .wordmark-name {
+    font-size: 1.02rem;
+    font-weight: 600;
+    letter-spacing: -.022em;
+  }
+  .wordmark-sub {
+    font-size: .625rem;
+    font-weight: 500;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: .15rem;
+  }
+  :global(:lang(zh)) .wordmark-name { font-size: 1.12rem; letter-spacing: .03em; }
+  :global(:lang(zh)) .wordmark-sub { text-transform: none; letter-spacing: .05em; font-size: .72rem; }
+
+  /* ---------------- nav ---------------- */
+  .site-nav { display: flex; align-items: center; gap: 1.4rem; flex-wrap: wrap; }
+  .nav-links {
+    display: flex; align-items: center; gap: 1.05rem;
+    list-style: none; margin: 0; padding: 0; flex-wrap: wrap;
+  }
+  .nav-links li { max-width: none; }
+
+  /* :not(.btn) is deliberate — a bare `.site-nav a` rule outranks
+     .btn--primary and silently kills the call to action's contrast. */
+  .nav-links a {
+    font-size: .875rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding-block: .35rem;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+  }
+  .nav-links a:hover { color: var(--ink); border-bottom-color: var(--rule); }
+  .nav-links a[aria-current='page'] { color: var(--ink); border-bottom-color: var(--accent); }
+
+  .nav-end { display: flex; align-items: center; gap: .85rem; }
+
+  /* ---------------- language switcher ---------------- */
+  .lang-switch {
+    display: inline-flex;
+    align-items: stretch;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+    flex: 0 0 auto;
+  }
+  .lang-switch > * {
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: .02em;
+    padding: .34rem .6rem;
+    text-decoration: none;
+    line-height: 1.3;
+    border-left: 1px solid var(--rule);
+    white-space: nowrap;
+  }
+  .lang-switch > *:first-child { border-left: 0; }
+  .lang-current { background: var(--brand); color: var(--paper); }
+  .lang-switch a { color: var(--ink-soft); background: transparent; }
+  .lang-switch a:hover { background: var(--brand-tint); color: var(--brand); }
+
+  .btn--sm { padding: .5rem 1.05rem; font-size: .84rem; }
+
+  /* ---------------- mobile ---------------- */
+  .nav-burger { display: none; }
+
+  @media (max-width: 66rem) {
+    .header-inner { min-height: var(--navh); }
+    .nav-burger {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.6rem; height: 2.6rem;
+      color: var(--ink);
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+    .nav-toggle:focus-visible + .nav-burger { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+    .site-nav {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding-bottom: 1rem;
+      border-top: 1px solid var(--rule);
+      max-height: calc(100vh - var(--navh));
+      overflow-y: auto;
+    }
+    .nav-toggle:checked ~ .site-nav { display: flex; }
+
+    .nav-links { flex-direction: column; align-items: stretch; gap: 0; }
+    .nav-links a {
+      display: block;
+      padding: .85rem .1rem;
+      border-bottom: 1px solid var(--rule-soft);
+      font-size: 1rem;
+    }
+    .nav-links a[aria-current='page'] { border-bottom-color: var(--accent); }
+    .nav-end { padding-top: 1rem; gap: .75rem; }
+    .nav-end .btn { flex: 1; }
+  }
+
+  @media (min-width: 66.01rem) {
+    .nav-toggle, .nav-burger { display: none; }
+  }
+</style>

@@ -1,0 +1,107 @@
+---
+import PageHeader from '../PageHeader.astro';
+import CtaBand from '../CtaBand.astro';
+import { useTranslations, path, type Lang, copyFor } from '../../i18n/ui';
+import { byLang, sortByDateDesc, formatDate } from '../../lib/content';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const posts = sortByDateDesc((await byLang('posts', lang)).filter((p) => !p.data.draft));
+const tags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
+
+const copy = {
+  en: {
+    eyebrow: 'Writing',
+    title: 'Notes from the space between two professions',
+    lede: 'Case-driven pieces on SLP–ABA collaboration, AAC, and the arguments both fields keep having. Written for practitioners, and readable by parents.',
+  },
+  zh: {
+    eyebrow: '專欄文章',
+    title: '來自兩個專業之間的筆記',
+    lede: '以個案為基礎的文章，談 SLP–ABA 協作、AAC，以及兩個領域一再爭論的那些事。為第一線工作者而寫，家長也讀得懂。',
+  },
+} as const;
+
+const c = copyFor(copy, lang);
+---
+
+<PageHeader eyebrow={c.eyebrow} title={c.title} lede={c.lede} />
+
+<section class="band">
+  <div class="shell shell--wide stack stack-5">
+    {tags.length > 0 && (
+      <ul class="tag-row" aria-label={t('blog.tags')}>
+        {tags.map((tag) => <li><span class="tag">{tag}</span></li>)}
+      </ul>
+    )}
+
+    {posts.length === 0 ? (
+      <p class="empty">{t('blog.empty')}</p>
+    ) : (
+      <ol class="posts">
+        {posts.map((p) => (
+          <li class="post">
+            <div class="post-when">
+              <time datetime={p.data.pubDate.toISOString().slice(0, 10)}>{formatDate(p.data.pubDate, lang)}</time>
+            </div>
+            <div class="post-body">
+              <h2><a href={`${path('blog', lang)}/${p.slug}`}>{p.data.title}</a></h2>
+              <p class="post-desc">{p.data.description}</p>
+              {p.data.tags.length > 0 && (
+                <ul class="post-tags">
+                  {p.data.tags.map((tag) => <li><span class="tag tag--sm">{tag}</span></li>)}
+                </ul>
+              )}
+            </div>
+          </li>
+        ))}
+      </ol>
+    )}
+  </div>
+</section>
+
+<CtaBand lang={lang} />
+
+<style>
+  .tag-row, .post-tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .45rem; }
+  .tag-row li, .post-tags li { max-width: none; }
+  .tag {
+    display: inline-block;
+    font-size: .75rem; font-weight: 600; letter-spacing: .04em;
+    color: var(--brand);
+    background: var(--brand-tint);
+    border: 1px solid transparent;
+    padding: .22rem .6rem;
+    border-radius: 999px;
+  }
+  .tag--sm { font-size: .6875rem; }
+
+  .empty {
+    font-family: var(--f-sans);
+    font-size: var(--t-2);
+    color: var(--ink-soft);
+    max-width: 44ch;
+    padding: 2rem 0 2rem 1.25rem;
+    border-left: 3px solid var(--accent);
+  }
+
+  .posts { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; }
+  .posts li { max-width: none; }
+  .post {
+    display: grid; grid-template-columns: 10rem 1fr; gap: .4rem 1.75rem;
+    padding-block: 1.75rem;
+    border-top: 1px solid var(--rule);
+    align-items: start;
+  }
+  .post:last-child { border-bottom: 1px solid var(--rule); }
+  @media (max-width: 42rem) { .post { grid-template-columns: 1fr; gap: .5rem; } }
+
+  .post-when time { font-size: .8125rem; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+  .post-body { display: flex; flex-direction: column; gap: .55rem; }
+  .post-body h2 { font-size: var(--t-2); }
+  .post-body h2 a { text-decoration: none; color: var(--ink); }
+  .post-body h2 a:hover { color: var(--brand); text-decoration: underline; }
+  .post-desc { color: var(--ink-soft); font-size: .9375rem; }
+</style>

@@ -1,0 +1,144 @@
+---
+import PageHeader from '../PageHeader.astro';
+import { site, type Lang, copyFor, isZh } from '../../i18n/ui';
+
+interface Props { lang: Lang; doc: 'privacy' | 'terms' | 'disclaimer' }
+const { lang, doc } = Astro.props;
+
+const updated = { en: 'Last updated 2 September 2026', zh: '最後更新：2026 年 9 月 2 日' } as const;
+
+const copy = {
+  en: {
+    privacy: {
+      title: 'Privacy policy',
+      lede: 'What this site collects, why, and what happens to it. Short, because there is not much.',
+      sections: [
+        ['What this site collects', 'Nothing automatically that identifies you. This site uses privacy-preserving analytics that count page views without cookies and without building a profile of you — which is why there is no cookie banner.'],
+        ['What you give me deliberately', 'If you send an inquiry, I receive your name, email address, the role you selected and your message. If you request a free guide, I receive your name and email address and add you to a mailing list.'],
+        ['What I do with it', 'Reply to you, and — if you signed up for a guide — send you that guide and occasional writing. I do not sell, rent, or share your details with anyone, and I do not use them to advertise to you elsewhere.'],
+        ['How long I keep it', 'Inquiries stay in my email for as long as the professional relationship or its record-keeping obligations require. Mailing list entries stay until you unsubscribe, which you can do from the bottom of any email.'],
+        ['Your rights', `Ask me what I hold about you, ask me to correct it, or ask me to delete it, by writing to ${site.email}. I will action it.`],
+        ['Third parties', 'The form delivery, the email platform, and the analytics are run by third-party providers, each of which processes only the data described above. Nothing else on this site loads third-party trackers.'],
+      ],
+    },
+    terms: {
+      title: 'Terms & conditions',
+      lede: 'The terms that apply to consultation, coaching and training services booked through this site.',
+      sections: [
+        ['Services', 'Consultation, coaching, professional development and training, delivered remotely unless otherwise agreed in writing. Services are provided to professionals, organizations and families.'],
+        ['Booking and payment', 'Payment is due at the time of booking. Rates are as published on the services page, or as agreed in writing for group and organizational work. No insurance is accepted.'],
+        ['Cancellation', 'You may reschedule or cancel without charge up to 24 hours before a scheduled session. Cancellations inside 24 hours may be charged in full.'],
+        ['Scope of the relationship', 'Consultation and coaching do not create a clinician–patient relationship, and do not constitute diagnosis, assessment or treatment of any individual child. See the service disclaimer.'],
+        ['Confidentiality', 'Case material you share is treated confidentially. Please de-identify client information before sharing it. Where a legal obligation to report arises, it takes precedence.'],
+        ['Intellectual property', 'Materials, handouts and frameworks provided remain the intellectual property of Speech & ABA Works and are licensed to you for your own professional use. They may not be resold or redistributed as training material without written permission.'],
+        ['Changes', 'These terms may be updated. The version in force is the one published here at the time of your booking.'],
+      ],
+    },
+    disclaimer: {
+      title: 'Service disclaimer',
+      lede: 'What these services are, and — importantly — what they are not.',
+      sections: [
+        ['Consultation, not treatment', 'Services offered through this site are professional consultation, coaching and training. They are not direct speech-language therapy, not applied behavior analysis services delivered to a client, and not a substitute for either.'],
+        ['No diagnosis or assessment', 'Nothing provided here constitutes a diagnostic evaluation, a formal assessment, or a clinical recommendation for a specific child. Decisions about an individual child remain with that child\'s own treating clinicians and family.'],
+        ['No clinician–patient relationship', 'Engaging these services does not establish a clinician–patient or therapist–client relationship, and does not create ongoing clinical responsibility for any individual.'],
+        ['Professional judgment remains yours', 'If you are a practitioner, you remain responsible for your own clinical decisions, for the scope of your license, and for compliance with your regulatory body and employer.'],
+        ['Content on this site', 'Articles, guides and resources are general educational material. They are not tailored to any individual and should not be applied without professional judgment about the child in front of you.'],
+        ['Urgent concerns', 'If you have an urgent concern about a child\'s safety, health or wellbeing, contact your local emergency or child protection services rather than waiting on a consultation.'],
+      ],
+    },
+  },
+
+  zh: {
+    privacy: {
+      title: '隱私權政策',
+      lede: '這個網站蒐集什麼、為什麼蒐集、以及之後會怎麼處理。內容很短，因為真的沒有多少。',
+      sections: [
+        ['網站自動蒐集什麼', '沒有任何能識別你身分的資料。本站使用保護隱私的分析工具，只計算頁面瀏覽次數，不使用 cookie，也不會建立你的個人輪廓——這也是為什麼你不會看到 cookie 同意橫幅。'],
+        ['你主動提供的資料', '如果你送出諮詢訊息，我會收到你的姓名、電子郵件、你選擇的身分別與訊息內容。如果你索取免費指南，我會收到你的姓名與電子郵件，並將你加入電子報名單。'],
+        ['我如何使用這些資料', '回覆你；如果你訂閱了指南，則寄送該指南與不定期的專欄文章。我不會販售、出租或分享你的資料給任何人，也不會用來在其他平台對你投放廣告。'],
+        ['保留多久', '諮詢訊息會保留在我的信箱中，直到專業關係或相關紀錄保存義務結束為止。電子報名單則保留到你退訂為止——每封信底部都可以退訂。'],
+        ['你的權利', `你可以來信 ${site.email}，詢問我持有你的哪些資料、要求更正，或要求刪除。我會確實處理。`],
+        ['第三方服務', '表單傳送、電子郵件平台與分析工具由第三方供應商提供，各自僅處理上述資料。本站沒有載入其他任何第三方追蹤程式。'],
+      ],
+    },
+    terms: {
+      title: '服務條款',
+      lede: '透過本網站預約的諮詢、教練與訓練服務所適用的條款。',
+      sections: [
+        ['服務內容', '諮詢、教練、專業發展與訓練，除另有書面約定外皆以遠距方式提供。服務對象包括專業人員、機構與家庭。'],
+        ['預約與付款', '費用於預約時支付。收費依服務頁面所公告之標準，團體與機構合作則依書面約定。不接受保險給付。'],
+        ['取消規定', '諮詢開始前 24 小時以上可免費改期或取消。24 小時內取消者，可能仍需支付全額費用。'],
+        ['關係的範圍', '諮詢與教練服務不構成臨床人員與病患的關係，也不構成對任何特定兒童的診斷、評估或治療。詳見服務免責聲明。'],
+        ['保密', '你所分享的個案素材將以保密方式處理。分享前請先去除個案的可識別資訊。若依法負有通報義務，該義務優先。'],
+        ['智慧財產', '所提供的教材、講義與架構之智慧財產權仍屬 Speech & ABA Works 所有，並授權你用於自身的專業實務。未經書面同意，不得轉售或作為訓練教材再散布。'],
+        ['條款變更', '本條款可能更新。以你預約當時本頁公告的版本為準。'],
+      ],
+    },
+    disclaimer: {
+      title: '服務免責聲明',
+      lede: '這些服務是什麼——以及同樣重要的，它們不是什麼。',
+      sections: [
+        ['是諮詢，不是治療', '本網站提供的是專業諮詢、教練與訓練服務。它們不是直接的語言治療、不是對個案執行的應用行為分析服務，也不能取代兩者中的任何一項。'],
+        ['不提供診斷或評估', '此處提供的任何內容都不構成診斷性評估、正式評量，或針對特定兒童的臨床建議。關於個別孩子的決策，仍屬於該名孩子的治療團隊與家庭。'],
+        ['不建立臨床人員與病患關係', '使用本服務不會建立臨床人員與病患、或治療師與個案的關係，也不會產生對任何個人的持續臨床責任。'],
+        ['專業判斷仍在你身上', '如果你是實務工作者，你仍須為自己的臨床決策、執照範圍，以及對主管機關與雇主的遵循義務負責。'],
+        ['網站上的內容', '文章、指南與資源皆為一般性的教育素材，並未針對任何個人量身設計；套用之前，請先對眼前這個孩子做出專業判斷。'],
+        ['緊急狀況', '若你對孩子的安全、健康或福祉有緊急疑慮，請直接聯繫當地的緊急服務或兒少保護單位，不要等待諮詢。'],
+      ],
+    },
+  },
+} as const;
+
+const c = copyFor(copy, lang)[doc];
+---
+
+<PageHeader title={c.title} lede={c.lede}>
+  <p class="small muted">{copyFor(updated, lang)}</p>
+</PageHeader>
+
+<section class="band">
+  <div class="shell">
+    <ol class="legal">
+      {c.sections.map(([h, b]) => (
+        <li class="clause">
+          <h2>{h}</h2>
+          <p>{b}</p>
+        </li>
+      ))}
+    </ol>
+    <p class="legal-contact small muted">
+      {isZh(lang) ? '有疑問請來信 ' : 'Questions about any of this: '}
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .legal { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; counter-reset: clause; }
+  .legal li { max-width: none; }
+  .clause {
+    counter-increment: clause;
+    padding-block: 1.5rem;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: .35rem 1.25rem;
+  }
+  .clause:last-child { border-bottom: 1px solid var(--rule); }
+  .clause::before {
+    content: counter(clause, decimal-leading-zero);
+    grid-row: 1 / span 2;
+    font-family: var(--f-sans);
+    font-size: .9375rem;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+    padding-top: .35rem;
+  }
+  .clause h2 { font-size: var(--t-1); font-weight: 600; }
+  .clause p { color: var(--ink-soft); font-size: .9375rem; }
+  @media (max-width: 34rem) {
+    .clause { grid-template-columns: 1fr; }
+    .clause::before { grid-row: auto; padding-top: 0; }
+  }
+  .legal-contact { padding-block: 1.75rem 0; }
+</style>

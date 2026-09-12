@@ -1,0 +1,448 @@
+---
+import StatBand from '../StatBand.astro';
+import Icon from '../Icon.astro';
+import Testimonials from '../Testimonials.astro';
+import CtaBand from '../CtaBand.astro';
+import BrandMark from '../BrandMark.astro';
+import { useTranslations, path, isZh, copyFor, type Lang } from '../../i18n/ui';
+import { byLang, sortByOrder } from '../../lib/content';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const services = sortByOrder(await byLang('services', lang)).filter((s) => s.data.featured).slice(0, 3);
+const resources = sortByOrder(await byLang('resources', lang)).slice(0, 2);
+
+const copy = {
+  en: {
+    eyebrow: 'SLP + BCBA · English · 廣東話 · 國語',
+    h1: 'Bridge our expertise. Amplify your impact.',
+    lede: 'Speech and behavior are not competing frameworks. They are complementary sciences — and neurodivergent children get better outcomes when the two teams stop working in parallel and start writing one plan.',
+    ctaPrimary: 'Book a free discovery call',
+    ctaSecondary: 'See services & rates',
+    markCaption: 'Two disciplines. One continuous loop. One plan.',
+    sessionAlt: 'A young child in a play-based session, reaching for a preferred item held by an adult.',
+    tensionsEyebrow: 'The daily standoff',
+    tensionsTitle: 'You have almost certainly had one of these arguments',
+    tensionsBody: 'Every one of these tensions is real, and every one of them dissolves once both disciplines are looking at the same data. This is the work.',
+    tensions: [
+      { a: 'AAC autonomy', b: 'Systematic prompt fading', note: 'The SLP wants the child to have unrestricted access to their voice. The BCBA wants a fading schedule that produces independence. Both are right.' },
+      { a: 'Instructional compliance', b: 'Self-regulation', note: 'A child who cannot follow a direction may be dysregulated rather than non-compliant. The distinction changes the entire intervention.' },
+      { a: 'Structure', b: 'Self-advocacy', note: 'Predictability supports learning. It can also teach a child that their objection carries no weight. The plan has to hold both.' },
+      { a: 'Form', b: 'Function', note: 'Motivation to communicate comes before the complexity of what is communicated. Getting the sequence right changes everything. Build the want, then the how.' },
+    ],
+    methodEyebrow: 'How the work runs',
+    methodTitle: 'You do not have to choose between Speech or ABA',
+    methodBody: 'You do not have to stay stuck in professional silos. And you do not have to navigate complex cases alone.',
+    method: [
+      { title: 'Assess with a dual lens', body: 'I evaluate communication and behavior together because they go hand-in-hand, so nothing is missed.' },
+      { title: 'Build an integrated plan', body: 'Goals and strategies are designed using both speech-language and behavioral frameworks.' },
+      { title: 'Implement, coach and refine', body: 'Through coaching support, I ensure strategies are applied confidently for lasting impact.' },
+    ],
+    audienceEyebrow: 'Who I work with',
+    audienceTitle: 'Four people at the same table',
+    audience: [
+      { name: 'Parents & families', body: 'You are being handed two sets of advice that do not agree, and you are the one who has to reconcile them at bedtime. I translate between the disciplines so you can advocate with confidence.' },
+      { name: 'Speech-language pathologists', body: 'Behavior is not an obstacle to your session — it is data about your session. Bring the caseload you find hardest: limited vocal learners, AAC abandonment, motor speech that will not generalize.' },
+      { name: 'BCBAs & behavior analysts', body: 'Verbal behavior is a starting point, not the whole of language. Advanced language programming, AAC selection, and knowing when a speech-sound problem is not a compliance problem.' },
+      { name: 'Educators & administrators', body: 'Professional development and classroom models that actually get used, drawn from seven years coaching in the largest public school district in the country.' },
+    ],
+    servicesEyebrow: 'Services',
+    servicesTitle: 'Ways to work together',
+    servicesLink: 'Full services & rates',
+    resourcesEyebrow: 'Free resources',
+    resourcesTitle: 'Start with something you can use this week',
+    resourcesLink: 'All resources',
+    proofTitle: 'Recognized work',
+    proofBody: 'Recipient of the 2025 Dissemination Award from ABAI\'s Speech Pathology and Applied Behavior Analysis Special Interest Group, for a collaborative classroom model integrating ABA and SLP in an early childhood program for students with autism.',
+  },
+
+  zh: {
+    eyebrow: '語言治療師 + 國際行為分析師 · 英文 · 廣東話 · 國語',
+    h1: '整合雙專業，\n放大你的影響力',
+    lede: '語言治療與應用行為分析不是互相競爭的取向，而是互補的科學。當兩個團隊不再各做各的、而是共同寫下一份計畫時，神經多樣性的孩子才真正受惠。',
+    ctaPrimary: '預約免費諮詢通話',
+    ctaSecondary: '查看服務與收費',
+    markCaption: '兩個專業，一條不斷開的環，一份計畫。',
+    sessionAlt: '一位幼兒在遊戲式療程中，伸手拿取大人手中的偏好物品。',
+    tensionsEyebrow: '每天都在發生的拉鋸',
+    tensionsTitle: '這些爭論，你幾乎一定遇過',
+    tensionsBody: '每一個拉鋸都是真實存在的；而當兩個專業看著同一份資料時，這些拉鋸就會化解。這正是我的工作。',
+    tensions: [
+      { a: 'AAC 使用自主權', b: '系統化提示褪除', note: '語言治療師希望孩子隨時能取用自己的聲音；行為分析師希望有明確的褪除流程以達到獨立。兩邊都沒有錯。' },
+      { a: '指令服從', b: '自我調節', note: '一個無法遵循指令的孩子，可能是情緒失調而非不配合。這個判斷會徹底改變整套介入方式。' },
+      { a: '結構化', b: '自我倡議', note: '可預測性支持學習，但也可能讓孩子學到「我的拒絕沒有份量」。好的計畫必須同時容納兩者。' },
+      { a: '形式 Form', b: '功能 Function', note: '溝通的動機，先於溝通內容的複雜度。順序對了，一切都會不同。先建立「想說」，再處理「怎麼說」。' },
+    ],
+    methodEyebrow: '合作方式',
+    methodTitle: '你不必在語言治療與 ABA 之間二選一',
+    methodBody: '你不必困在專業本位的高牆之中，也不必獨自面對複雜的個案。',
+    method: [
+      { title: '以雙重視角評估', body: '我同時評估溝通與行為，因為兩者本就密不可分，這樣才不會有所遺漏。' },
+      { title: '建立整合計畫', body: '目標與策略同時依據語言治療與行為分析兩套框架設計。' },
+      { title: '執行、教練與調整', body: '透過教練式支持，我確保策略被有信心地執行，帶來持久的成效。' },
+    ],
+    audienceEyebrow: '服務對象',
+    audienceTitle: '同一張桌子上的四種人',
+    audience: [
+      { name: '家長與家庭', body: '你拿到兩套彼此不一致的建議，而必須在睡前把它們調和起來的人是你。我在兩個專業之間翻譯，讓你能有底氣地為孩子發聲。' },
+      { name: '語言治療師', body: '行為不是你療程的阻礙，而是關於你療程的資料。帶著你覺得最棘手的個案來：低口語學習者、AAC 被放棄、動作言語障礙難以類化。' },
+      { name: 'BCBA 與行為分析師', body: '語言行為是起點，不是語言的全部。進階語言方案設計、AAC 選配，以及如何判斷語音問題其實不是服從問題。' },
+      { name: '教育工作者與行政人員', body: '真的會被用起來的專業發展與課堂模式，源自我在全美最大公立學區七年的教學教練經驗。' },
+    ],
+    servicesEyebrow: '服務項目',
+    servicesTitle: '我們可以如何合作',
+    servicesLink: '完整服務與收費',
+    resourcesEyebrow: '免費資源',
+    resourcesTitle: '從這週就用得上的東西開始',
+    resourcesLink: '所有資源',
+    proofTitle: '專業肯定',
+    proofBody: '榮獲 2025 年 ABAI 語言治療與應用行為分析特殊興趣小組（SPABA）頒發的推廣獎，表彰其為自閉症幼兒特教班設計、整合 ABA 與 SLP 的協作課堂模式。',
+  },
+} as const;
+
+const c = copyFor(copy, lang);
+---
+
+<!-- ───────────────────────────── hero -->
+<section class="hero">
+  <span class="geo geo--a" aria-hidden="true"></span>
+  <span class="geo geo--b geo--solid" aria-hidden="true"></span>
+  <div class="shell shell--wide hero-inner">
+    <div class="hero-copy stack stack-4">
+      <div class="stack stack-3">
+        <p class="eyebrow">{c.eyebrow}</p>
+        <h1>{c.h1}</h1>
+        <p class="lede">{c.lede}</p>
+      </div>
+      <div class="btn-row">
+        <a class="btn btn--primary" href={path('contact', lang)}>{c.ctaPrimary}</a>
+        <a class="btn btn--ghost" href={path('services', lang)}>{c.ctaSecondary}</a>
+      </div>
+    </div>
+    <figure class="hero-figure">
+      <BrandMark
+        lockup
+        zh={isZh(lang)}
+        size={isZh(lang) ? 320 : 340}
+        alt={isZh(lang)
+          ? 'Speech & ABA Works 標誌：一個無限符號，左環寫著 Speech，右環寫著 ABA。'
+          : 'The Speech & ABA Works mark — an infinity loop, one half labeled Speech and the other ABA.'}
+      />
+      <figcaption>{c.markCaption}</figcaption>
+    </figure>
+  </div>
+</section>
+
+<StatBand lang={lang} />
+
+<!-- ───────────────────────────── the tensions -->
+<section class="band band--tint">
+  <div class="shell shell--wide stack stack-5">
+    <div class="section-title">
+      <p class="eyebrow">{c.tensionsEyebrow}</p>
+      <h2>{c.tensionsTitle}</h2>
+      <p class="muted">{c.tensionsBody}</p>
+    </div>
+
+    <ul class="tensions">
+      {c.tensions.map((x) => (
+        <li class="tension">
+          <p class="tension-pair">
+            <span class="tension-a">{x.a}</span>
+            <span class="tension-vs"><Icon name="exchange" size={18} /></span>
+            <span class="tension-b">{x.b}</span>
+          </p>
+          <p class="tension-note">{x.note}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<!-- ───────────────────────────── method -->
+<section class="band">
+  <div class="shell shell--wide stack stack-5">
+    <div class="section-title">
+      <p class="eyebrow">{c.methodEyebrow}</p>
+      <h2>{c.methodTitle}</h2>
+      <p class="muted">{c.methodBody}</p>
+    </div>
+
+    <div class="method-layout">
+    <figure class="method-figure">
+      <img src="/images/session-child.jpg" alt={c.sessionAlt} width="1100" height="1100" loading="lazy" />
+    </figure>
+
+    <ol class="method">
+      {c.method.map((step, i) => (
+        <li class="step">
+          <span class="step-n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+          <div class="step-body">
+            <h3>{step.title}</h3>
+            <p>{step.body}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────── audiences -->
+<section class="band band--tint">
+  <div class="shell shell--wide stack stack-5">
+    <div class="section-title">
+      <p class="eyebrow">{c.audienceEyebrow}</p>
+      <h2>{c.audienceTitle}</h2>
+    </div>
+    <ul class="audience-grid">
+      {c.audience.map((a) => (
+        <li class="audience">
+          <h3>{a.name}</h3>
+          <p>{a.body}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<!-- ───────────────────────────── services teaser -->
+{services.length > 0 && (
+  <section class="band">
+    <div class="shell shell--wide stack stack-5">
+      <div class="section-title">
+        <p class="eyebrow">{c.servicesEyebrow}</p>
+        <h2>{c.servicesTitle}</h2>
+      </div>
+      <ul class="service-grid">
+        {services.map((s) => (
+          <li class="service card">
+            <h3>{s.data.title}</h3>
+            <p class="service-rate">{s.data.rate}</p>
+            <p class="service-summary">{s.data.summary}</p>
+            <p class="service-who small muted">{s.data.who}</p>
+          </li>
+        ))}
+      </ul>
+      <p><a class="arrow-link" href={path('services', lang)}>{c.servicesLink}<Icon name="arrow-right" size={17} /></a></p>
+    </div>
+  </section>
+)}
+
+<!-- ───────────────────────────── award -->
+<section class="band band--deep">
+  <span class="geo geo--a" aria-hidden="true"></span>
+  <div class="shell">
+    <div class="proof">
+      <p class="eyebrow">{c.proofTitle}</p>
+      <p class="proof-body">{c.proofBody}</p>
+    </div>
+  </div>
+</section>
+
+<Testimonials lang={lang} featuredOnly limit={3} />
+
+<!-- ───────────────────────────── resources teaser -->
+{resources.length > 0 && (
+  <section class="band band--tint">
+    <div class="shell shell--wide stack stack-5">
+      <div class="section-title">
+        <p class="eyebrow">{c.resourcesEyebrow}</p>
+        <h2>{c.resourcesTitle}</h2>
+      </div>
+      <ul class="service-grid">
+        {resources.map((r) => (
+          <li class="service card">
+            <h3>{r.data.title}</h3>
+            <p class="service-summary">{r.data.summary}</p>
+            <p><a class="arrow-link" href={`${path('resources', lang)}#${r.slug}`}>{t('cta.download')}<Icon name="arrow-right" size={17} /></a></p>
+          </li>
+        ))}
+      </ul>
+      <p><a class="arrow-link" href={path('resources', lang)}>{c.resourcesLink}<Icon name="arrow-right" size={17} /></a></p>
+    </div>
+  </section>
+)}
+
+<CtaBand lang={lang} />
+
+<style>
+  /* ---------- hero ---------- */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--rule);
+    background:
+      radial-gradient(90% 120% at 12% -10%, var(--brand-tint) 0%, transparent 62%),
+      var(--paper);
+  }
+  .hero-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(17rem, 25rem);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+    padding-block: clamp(3rem, 7vw, 5.5rem);
+  }
+  @media (max-width: 54rem) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-figure { order: -1; }
+  }
+  .hero-copy h1 { max-width: 17ch; }
+  /* Chinese characters are full-width and the serif sets large, so the
+     headline needs a smaller size and a longer measure to hold two lines. */
+  /* Chinese has no spaces, so the browser will break mid-word wherever the
+     measure runs out. The headline carries its own newline instead. */
+  :global(:lang(zh)) .hero-copy h1 {
+    max-width: none;
+    white-space: pre-line;
+    font-size: clamp(2rem, 1.35rem + 2.3vw, 2.8rem);
+    line-height: 1.32;
+  }
+  .hero-copy .lede { max-width: 46ch; }
+  .hero-figure {
+    margin: 0;
+    display: flex; flex-direction: column; align-items: center; gap: .9rem;
+  }
+  /* The mark's counters are knocked out, so it needs a light ground in
+     both themes rather than inheriting a dark one. */
+  .hero-figure :global(.brandmark) { width: 100%; max-width: 22rem; }
+  .hero-figure :global(.brandmark img) { width: 100% !important; }
+  .hero-figure figcaption {
+    font-size: .8125rem;
+    letter-spacing: .04em;
+    color: var(--ink-faint);
+    text-align: center;
+    max-width: 26ch;
+  }
+
+  /* ---------- tensions ---------- */
+  /* Exactly two columns: four items must fill 2×2, never orphan one
+     in a third column where the nth-child(even) rule mis-indents it. */
+  .tensions {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    border-top: 1px solid var(--rule);
+  }
+  @media (min-width: 44rem) {
+    .tensions { grid-template-columns: 1fr 1fr; }
+  }
+  .tensions li { max-width: none; }
+  .tension {
+    padding: 1.4rem 1.5rem 1.5rem 0;
+    border-bottom: 1px solid var(--rule);
+    display: flex; flex-direction: column; gap: .5rem;
+  }
+  @media (min-width: 44rem) {
+    .tension:nth-child(even) { padding-left: 1.75rem; border-left: 1px solid var(--rule); }
+  }
+
+  .tension-pair {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: .4rem .55rem;
+    font-family: var(--f-sans);
+    font-size: var(--t-1);
+    font-weight: 600;
+    line-height: 1.3;
+    max-width: none;
+  }
+  .tension-a { color: var(--brand); }
+  .tension-b { color: var(--accent); }
+  .tension-vs { color: var(--ink-faint); display: inline-flex; align-self: center; }
+  .tension-note { font-size: .9375rem; color: var(--ink-soft); }
+
+  /* ---------- method ---------- */
+  .method-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
+    gap: clamp(1.75rem, 4vw, 3.25rem);
+    align-items: start;
+  }
+  @media (max-width: 54rem) { .method-layout { grid-template-columns: 1fr; } }
+
+  .method-figure { margin: 0; }
+  .method-figure img {
+    width: 100%; height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 3px;
+    border: 1px solid var(--rule);
+    box-shadow: var(--shadow-md);
+  }
+  @media (max-width: 54rem) {
+    .method-figure img { aspect-ratio: 16 / 10; }
+  }
+
+  .method { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; }
+  .method li { max-width: none; }
+  .step {
+    display: grid;
+    grid-template-columns: 4rem 1fr;
+    gap: 0 1.5rem;
+    padding-block: 1.6rem;
+    border-top: 1px solid var(--rule);
+    align-items: start;
+  }
+  .step:last-child { border-bottom: 1px solid var(--rule); }
+  .step-n {
+    font-family: var(--f-sans);
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+  }
+  .step-body { display: flex; flex-direction: column; gap: .45rem; }
+  .step-body p { color: var(--ink-soft); }
+  @media (max-width: 34rem) {
+    .step { grid-template-columns: 1fr; gap: .35rem; }
+  }
+
+  /* ---------- audiences ---------- */
+  .audience-grid {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: 1.5rem 2rem;
+  }
+  .audience-grid li { max-width: none; }
+  .audience {
+    display: flex; flex-direction: column; gap: .5rem;
+    padding-top: 1rem;
+    border-top: 2px solid var(--brand);
+  }
+  .audience h3 { font-size: var(--t-1); }
+  .audience p { color: var(--ink-soft); font-size: .9375rem; }
+
+  /* ---------- service / resource cards ---------- */
+  .service-grid {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: 1.25rem;
+  }
+  .service-grid li { max-width: none; }
+  .service { height: 100%; }
+  .service-rate {
+    font-family: var(--f-sans);
+    font-size: var(--t-2);
+    color: var(--brand);
+    font-variant-numeric: tabular-nums;
+  }
+  .service-summary { font-size: .9375rem; color: var(--ink-soft); }
+  .service-who { margin-top: auto; padding-top: .6rem; border-top: 1px solid var(--rule-soft); }
+
+  /* ---------- proof ---------- */
+  .proof {
+    display: flex; flex-direction: column; gap: .6rem;
+    padding: 1.5rem 0 1.5rem 1.4rem;
+    border-left: 3px solid var(--accent);
+  }
+  .proof-body {
+    font-family: var(--f-sans);
+    font-size: var(--t-1);
+    line-height: 1.55;
+    color: var(--ink-soft);
+    max-width: 58ch;
+  }
+</style>

@@ -1,0 +1,63 @@
+---
+import { useTranslations, site, type Lang } from '../i18n/ui';
+interface Props { lang: Lang; tone?: 'plain' | 'tint' }
+const { lang, tone = 'plain' } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<div class={`statband statband--${tone}`}>
+  <dl class="shell shell--wide statband-inner">
+    {site.stats.map((s) => (
+      <div class="stat">
+        <dt class="stat-value">{s.value}</dt>
+        <dd class="stat-label">{t(s.key as any)}</dd>
+      </div>
+    ))}
+  </dl>
+</div>
+
+<style>
+  .statband { border-block: 1px solid var(--rule); }
+  .statband--tint { background: var(--surface-2); }
+
+  .statband-inner {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin: 0;
+    padding-block: 0;
+  }
+  @media (max-width: 48rem) {
+    .statband-inner { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+    padding: 1.6rem 1.15rem 1.7rem;
+    border-left: 1px solid var(--rule-soft);
+  }
+  .stat:first-child { border-left: 0; padding-left: 0; }
+  @media (max-width: 48rem) {
+    .stat:nth-child(odd) { border-left: 0; padding-left: 0; }
+    .stat:nth-child(-n+2) { border-bottom: 1px solid var(--rule-soft); }
+  }
+
+  .stat-value {
+    font-family: var(--f-sans);
+    font-size: clamp(1.9rem, 1.4rem + 1.6vw, 2.6rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -.02em;
+    color: var(--brand);
+    font-variant-numeric: tabular-nums;
+    margin: 0;
+  }
+  .stat-label {
+    margin: 0;
+    font-size: .8125rem;
+    line-height: 1.4;
+    color: var(--ink-soft);
+    max-width: 20ch;
+  }
+</style>

@@ -1,0 +1,55 @@
+---
+/**
+ * The Speech & ABA Works infinity mark. Fully transparent — including the
+ * loop counters — so it sits on any ground without a plate behind it.
+ * The dark variant lifts the near-black wordmark to warm beige; the
+ * gradient loop is identical in both.
+ */
+interface Props {
+  size?: number;
+  lockup?: boolean;
+  /** The Chinese lockup carries 助「言」起「行」| 言語行為協作治療室 beneath the mark. */
+  zh?: boolean;
+  alt?: string;
+  class?: string;
+}
+const { size = 42, lockup = false, zh = false, alt = '', class: className = '' } = Astro.props;
+
+const base = zh ? '/images/logo-zh-lockup' : lockup ? '/images/logo-lockup' : '/images/logo-mark';
+const ratio = zh ? 456 / 1332 : lockup ? 448 / 1712 : 448 / 888;
+---
+
+<picture class={`brandmark ${className}`}>
+  <source srcset={`${base}-dark.png`} media="(prefers-color-scheme: dark)" />
+  <img
+    src={`${base}.png`}
+    alt={alt}
+    aria-hidden={alt ? undefined : 'true'}
+    width={size}
+    height={Math.round(size * ratio)}
+    style={`width:${size}px`}
+  />
+</picture>
+
+<style>
+  .brandmark { display: block; flex: 0 0 auto; }
+  .brandmark img { height: auto; }
+
+  /* An explicit theme choice must beat the OS preference in both
+     directions, so each stamped theme pins its own source. */
+  :global(:root[data-theme='light']) .brandmark img { content: none; }
+</style>
+
+<script is:inline>
+  // <picture> resolves against the OS preference only. When the reader has
+  // stamped an explicit theme, point the image at the matching file.
+  (() => {
+    const stamp = document.documentElement.getAttribute('data-theme');
+    if (!stamp) return;
+    for (const img of document.querySelectorAll('.brandmark img')) {
+      const src = img.getAttribute('src') || '';
+      const bare = src.replace('-dark.png', '.png');
+      img.setAttribute('src', stamp === 'dark' ? bare.replace('.png', '-dark.png') : bare);
+    }
+  })();
+</script>

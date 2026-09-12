@@ -1,0 +1,101 @@
+---
+import PageHeader from '../PageHeader.astro';
+import CtaBand from '../CtaBand.astro';
+import { type Lang, copyFor } from '../../i18n/ui';
+import { byLang, sortByOrder } from '../../lib/content';
+import { render } from 'astro:content';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+
+const faqs = sortByOrder(await byLang('faqs', lang));
+const rendered = await Promise.all(
+  faqs.map(async (f) => ({ entry: f, Content: (await render(f)).Content })),
+);
+
+const copy = {
+  en: {
+    eyebrow: 'FAQs',
+    title: 'The questions people actually ask',
+  },
+  zh: {
+    eyebrow: '常見問題',
+    title: '大家真正會問的問題',
+  },
+} as const;
+
+const c = copyFor(copy, lang);
+---
+
+<PageHeader eyebrow={c.eyebrow} title={c.title} />
+
+<section class="band band--tint">
+  <div class="shell stack stack-4">
+    <ol class="faq-list">
+      {rendered.map(({ entry: f, Content }, i) => (
+        <li class="faq">
+          <details open={i === 0}>
+            <summary>
+              <span class="faq-q">{f.data.question}</span>
+              <span class="faq-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="prose faq-a"><Content /></div>
+          </details>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<CtaBand lang={lang} />
+
+<style>
+  /* Constrained to its own reading column. The paragraphs inside are
+     capped at --measure, so a full-width row would leave the answer
+     floating in half an empty band — fine when the answers were two
+     lines, conspicuous now that they run several paragraphs. */
+  .faq-list {
+    list-style: none; margin: 0; padding: 0;
+    display: flex; flex-direction: column; gap: 0;
+    max-width: 44rem;
+  }
+  .faq-list li { max-width: none; }
+
+  .faq { border-top: 1px solid var(--rule); }
+  .faq:last-child { border-bottom: 1px solid var(--rule); }
+
+  details summary {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 1.5rem;
+    padding-block: 1.15rem;
+    cursor: pointer;
+    list-style: none;
+  }
+  details summary::-webkit-details-marker { display: none; }
+
+  .faq-q {
+    font-family: var(--f-sans);
+    font-size: var(--t-2);
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ink);
+    text-wrap: balance;
+    max-width: 46ch;
+  }
+  details[open] .faq-q { color: var(--brand); }
+
+  .faq-icon {
+    flex: 0 0 auto; position: relative;
+    width: 1rem; height: 1rem; margin-top: .4rem;
+  }
+  .faq-icon::before, .faq-icon::after {
+    content: ""; position: absolute; background: var(--accent);
+    transition: transform .2s ease, opacity .2s ease;
+  }
+  .faq-icon::before { top: 50%; left: 0; width: 100%; height: 2px; transform: translateY(-50%); }
+  .faq-icon::after { left: 50%; top: 0; height: 100%; width: 2px; transform: translateX(-50%); }
+  details[open] .faq-icon::after { opacity: 0; transform: translateX(-50%) rotate(90deg); }
+
+  .faq-a { padding-bottom: 1.75rem; padding-right: 1.5rem; }
+  .faq-a :global(p), .faq-a :global(li) { color: var(--ink-soft); }
+  .faq-a :global(em) { color: var(--ink); }
+</style>

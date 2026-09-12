@@ -1,0 +1,178 @@
+# ─────────────────────────────────────────────────────────────
+#  Sveltia CMS  ·  speechabaworks.com
+#
+#  Before this works, two values below need filling in:
+#    backend.repo     → your GitHub username / repository name
+#    backend.base_url → the URL of your sveltia-cms-auth Worker
+#  Both are covered in SETUP.md, step 4.
+#
+#  Three locales: English, Traditional Chinese, Simplified Chinese.
+#  Write the Traditional version; `npm run sync:hans` fills in the
+#  Simplified one, and any Simplified text you edit here is kept.
+# ─────────────────────────────────────────────────────────────
+
+backend:
+  name: github
+  repo: YOUR-GITHUB-USERNAME/speechabaworks
+  branch: main
+  base_url: https://auth.speechabaworks.com
+
+publish_mode: simple
+site_url: https://speechabaworks.com
+display_url: https://speechabaworks.com
+logo_url: https://speechabaworks.com/favicon.svg
+
+media_folder: public/images/uploads
+public_folder: /images/uploads
+
+# English and Chinese versions of the same item are edited side by side.
+i18n:
+  structure: multiple_folders
+  locales: [en, zh-hant, zh-hans]
+  default_locale: en
+
+collections:
+  # ───────────────────────────── writing
+  - name: posts
+    label: Writing
+    label_singular: Post
+    folder: src/content/posts
+    create: true
+    slug: '{{slug}}'
+    i18n: true
+    preview_path: 'blog/{{slug}}'
+    summary: '{{title}}  —  {{pubDate | date("D MMM YYYY")}}'
+    sortable_fields: [pubDate, title]
+    fields:
+      - { name: title, label: Title, widget: string, i18n: true }
+      - { name: description, label: Summary, widget: text, i18n: true,
+          hint: 'One or two sentences. Shown on the blog index and in search results.' }
+      - { name: pubDate, label: Published, widget: datetime, format: 'YYYY-MM-DD',
+          date_format: 'YYYY-MM-DD', time_format: false, i18n: duplicate }
+      - { name: updatedDate, label: Updated, widget: datetime, format: 'YYYY-MM-DD',
+          date_format: 'YYYY-MM-DD', time_format: false, required: false, i18n: duplicate }
+      - { name: tags, label: Topics, widget: list, default: [], required: false, i18n: true }
+      - { name: draft, label: Draft (hidden from the site), widget: boolean, default: false, i18n: duplicate }
+      - { name: body, label: Post, widget: markdown, i18n: true }
+
+  # ───────────────────────────── services
+  - name: services
+    label: Services & rates
+    label_singular: Service
+    folder: src/content/services
+    create: true
+    slug: '{{slug}}'
+    i18n: true
+    summary: '{{title}}  —  {{rate}}'
+    sortable_fields: [order, title]
+    fields:
+      - { name: title, label: Name, widget: string, i18n: true }
+      - { name: order, label: Sort order, widget: number, default: 50, value_type: int, i18n: duplicate,
+          hint: 'Lower numbers appear first.' }
+      - { name: summary, label: Short description, widget: text, i18n: true }
+      - { name: rate, label: Rate, widget: string, i18n: true, hint: 'e.g. $150 USD / hour, or Free' }
+      - { name: rateNote, label: Rate note, widget: string, required: false, i18n: true }
+      - { name: who, label: Who it is for, widget: string, i18n: true }
+      - { name: format, label: Format, widget: string, i18n: true }
+      - { name: duration, label: Duration, widget: string, i18n: true }
+      - { name: includes, label: What is included, widget: list, default: [], i18n: true }
+      - { name: featured, label: Show on the home page, widget: boolean, default: false, i18n: duplicate }
+      - { name: ctaLabel, label: Button text, widget: string, required: false, i18n: true }
+      - { name: body, label: Full description, widget: markdown, required: false, i18n: true }
+
+  # ───────────────────────────── testimonials
+  - name: testimonials
+    label: Testimonials
+    label_singular: Testimonial
+    folder: src/content/testimonials
+    create: true
+    slug: '{{slug}}'
+    i18n: true
+    summary: '{{name}}  —  {{pull}}'
+    sortable_fields: [order, name]
+    fields:
+      - { name: name, label: Name, widget: string, i18n: true }
+      - { name: role, label: Role / organization, widget: string, i18n: true }
+      - { name: pull, label: Headline quote, widget: string, i18n: true,
+          hint: 'The short line shown in bold. One sentence at most.' }
+      - { name: quote, label: Full quote, widget: text, i18n: true }
+      - { name: order, label: Sort order, widget: number, default: 50, value_type: int, i18n: duplicate }
+      - { name: featured, label: Show on the home page, widget: boolean, default: false, i18n: duplicate }
+
+  # ───────────────────────────── talks
+  - name: talks
+    label: Talks & appearances
+    label_singular: Talk
+    folder: src/content/talks
+    create: true
+    slug: '{{year}}-{{month}}-{{slug}}'
+    i18n: true
+    summary: '{{date | date("MMM YYYY")}}  —  {{title}}'
+    sortable_fields: [date, title]
+    fields:
+      - { name: title, label: Title, widget: string, i18n: true }
+      - { name: host, label: Host / organization, widget: string, i18n: true }
+      - { name: date, label: Date, widget: datetime, format: 'YYYY-MM-DD',
+          date_format: 'YYYY-MM-DD', time_format: false, i18n: duplicate }
+      - { name: kind, label: Type, widget: select, i18n: duplicate,
+          options: [podcast, workshop, training, conference, keynote] }
+      - { name: location, label: Location or language, widget: string, required: false, i18n: true }
+      - { name: summary, label: Summary, widget: text, i18n: true }
+      - { name: link, label: Link, widget: string, required: false, i18n: duplicate }
+      - { name: image, label: Photo or episode artwork, widget: image, required: false, i18n: duplicate,
+          hint: 'Drag an image in, or pick one already uploaded. Landscape works best.' }
+      - { name: imageAlt, label: Image description, widget: string, required: false, i18n: true,
+          hint: 'Describe the image for screen readers and search engines.' }
+
+  # ───────────────────────────── partners
+  - name: partners
+    label: Partner organizations
+    label_singular: Partner
+    folder: src/content/partners
+    create: true
+    slug: '{{slug}}'
+    i18n: true
+    summary: '{{name}}  —  {{region}}'
+    fields:
+      - { name: name, label: Organization, widget: string, i18n: true }
+      - { name: region, label: Location, widget: string, i18n: true }
+      - { name: note, label: Nature of the work, widget: text, i18n: true }
+      - { name: order, label: Sort order, widget: number, default: 50, value_type: int, i18n: duplicate }
+      - { name: link, label: Link, widget: string, required: false, i18n: duplicate }
+      - { name: image, label: Logo or photo, widget: image, required: false, i18n: duplicate }
+      - { name: imageAlt, label: Image description, widget: string, required: false, i18n: true }
+
+  # ───────────────────────────── free resources
+  - name: resources
+    label: Free resources
+    label_singular: Resource
+    folder: src/content/resources
+    create: true
+    slug: '{{slug}}'
+    i18n: true
+    summary: '{{title}}'
+    fields:
+      - { name: title, label: Title, widget: string, i18n: true }
+      - { name: summary, label: Description, widget: text, i18n: true }
+      - { name: forWhom, label: Who it is for, widget: string, i18n: true }
+      - { name: order, label: Sort order, widget: number, default: 50, value_type: int, i18n: duplicate }
+      - { name: gated, label: Require an email address, widget: boolean, default: true, i18n: duplicate }
+      - { name: file, label: PDF file, widget: file, required: false, i18n: true }
+      - { name: formId, label: Mailing list ID, widget: string, required: false, i18n: true,
+          hint: 'The list or tag name in your email platform. Leave as-is unless you change it there.' }
+      - { name: body, label: Extra detail, widget: markdown, required: false, i18n: true }
+
+  # ───────────────────────────── FAQs
+  - name: faqs
+    label: FAQs
+    label_singular: FAQ
+    folder: src/content/faqs
+    create: true
+    slug: '{{slug}}'
+    i18n: true
+    summary: '{{question}}'
+    sortable_fields: [order]
+    fields:
+      - { name: question, label: Question, widget: string, i18n: true }
+      - { name: order, label: Sort order, widget: number, default: 50, value_type: int, i18n: duplicate }
+      - { name: body, label: Answer, widget: markdown, i18n: true }

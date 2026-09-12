@@ -1,0 +1,216 @@
+---
+import PageHeader from '../PageHeader.astro';
+import Icon from '../Icon.astro';
+import CtaBand from '../CtaBand.astro';
+import Testimonials from '../Testimonials.astro';
+import { useTranslations, path, type Lang, copyFor } from '../../i18n/ui';
+import { byLang, sortByOrder } from '../../lib/content';
+import { render } from 'astro:content';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const services = sortByOrder(await byLang('services', lang));
+const rendered = await Promise.all(
+  services.map(async (s) => ({ entry: s, Content: (await render(s)).Content })),
+);
+
+const copy = {
+  en: {
+    eyebrow: 'Services & rates',
+    title: 'Ways to work together',
+    lede: 'Everything is remote by default, delivered over secure video, and available in English, Cantonese or Mandarin. Nothing here requires a contract or a minimum commitment.',
+    termsTitle: 'Terms, plainly',
+    terms: [
+      ['Payment', 'Due at the time of booking. No insurance is accepted — these are consultation and coaching services rather than direct therapy.'],
+      ['Cancellation', 'Reschedule or cancel up to 24 hours before your session at no charge.'],
+      ['Delivery', 'Google Meet or Zoom. In-person engagements possible by arrangement for training and team work.'],
+      ['Languages', 'English, Cantonese, Mandarin. Say which you prefer when you book.'],
+      ['Where clients are', 'United States, United Kingdom, Australia, mainland China, Taiwan and Hong Kong. Sessions are scheduled to accommodate the client\'s time zone.'],
+    ],
+    scopeTitle: 'What I consult on',
+    scope: [
+      'AAC device selection and implementation',
+      'Advanced language programming',
+      'Speech sound programs for limited vocal learners',
+      'Motor speech disorder troubleshooting',
+      'SLP–ABA collaboration and integrated plan writing',
+      'Positive behavior support in classroom settings',
+    ],
+  },
+  zh: {
+    eyebrow: '服務與收費',
+    title: '我們可以如何合作',
+    lede: '所有服務預設以遠距進行，透過安全的視訊平台，並可使用英文、廣東話或國語。沒有任何項目需要簽約或最低承諾。',
+    termsTitle: '條款，直說',
+    terms: [
+      ['付款', '於預約時支付。不接受保險給付——這裡提供的是諮詢與教練服務，而非直接治療。'],
+      ['取消', '諮詢開始前 24 小時以上改期或取消，不收取費用。'],
+      ['形式', 'Google Meet 或 Zoom。訓練與團隊工作可另行安排實體場次。'],
+      ['語言', '英文、廣東話、國語。預約時說明你偏好的語言即可。'],
+      ['客戶所在地', '美國、英國、澳洲、中國大陸、台灣與香港。諮詢時間依客戶所在時區安排。'],
+    ],
+    scopeTitle: '我提供諮詢的範圍',
+    scope: [
+      'AAC 輔具的選配與導入',
+      '進階語言方案設計',
+      '低口語學習者的語音方案',
+      '動作言語障礙的問題排除',
+      'SLP–ABA 協作與整合計畫撰寫',
+      '課堂情境中的正向行為支持',
+    ],
+  },
+} as const;
+
+const c = copyFor(copy, lang);
+---
+
+<PageHeader eyebrow={c.eyebrow} title={c.title} lede={c.lede} />
+
+<section class="band">
+  <div class="shell shell--wide stack stack-5">
+    <ul class="service-list">
+      {rendered.map(({ entry: s, Content }) => (
+        <li class="svc" id={s.slug}>
+          <div class="svc-head">
+            <div class="stack stack-1">
+              <h2>{s.data.title}</h2>
+              <p class="svc-summary">{s.data.summary}</p>
+            </div>
+            <div class="svc-price">
+              <span class="svc-rate">{s.data.rate}</span>
+              {s.data.rateNote && <span class="svc-rate-note">{s.data.rateNote}</span>}
+            </div>
+          </div>
+
+          <dl class="svc-meta">
+            <div><dt>{t('services.who')}</dt><dd>{s.data.who}</dd></div>
+            <div><dt>{t('services.format')}</dt><dd>{s.data.format}</dd></div>
+            <div><dt>{t('services.duration')}</dt><dd>{s.data.duration}</dd></div>
+          </dl>
+
+          {s.data.includes.length > 0 && (
+            <ul class="svc-includes">
+              {s.data.includes.map((i) => (
+                <li><Icon name="check" size={17} class="tick" /><span>{i}</span></li>
+              ))}
+            </ul>
+          )}
+
+          <div class="prose svc-body"><Content /></div>
+
+          <p class="svc-cta">
+            <a class="btn btn--primary" href={path('contact', lang)}>{s.data.ctaLabel ?? t('cta.bookShort')}</a>
+          </p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<section class="band band--tint">
+  <div class="shell shell--wide two-col">
+    <div class="stack stack-3">
+      <h2 class="h-sub">{c.scopeTitle}</h2>
+      <ul class="scope">
+        {c.scope.map((s) => <li>{s}</li>)}
+      </ul>
+    </div>
+    <div class="stack stack-3">
+      <h2 class="h-sub">{c.termsTitle}</h2>
+      <dl class="terms">
+        {c.terms.map(([k, v]) => (
+          <div class="term"><dt>{k}</dt><dd>{v}</dd></div>
+        ))}
+      </dl>
+    </div>
+  </div>
+</section>
+
+<Testimonials lang={lang} limit={3} featuredOnly />
+
+<CtaBand lang={lang} />
+
+<style>
+  .service-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; }
+  .service-list > li { max-width: none; }
+
+  .svc {
+    display: flex; flex-direction: column; gap: 1.1rem;
+    padding-block: 2.25rem;
+    border-top: 1px solid var(--rule);
+    scroll-margin-top: 6rem;
+  }
+  .svc:last-child { border-bottom: 1px solid var(--rule); }
+
+  .svc-head {
+    display: flex; flex-wrap: wrap; gap: .9rem 2rem;
+    align-items: baseline; justify-content: space-between;
+  }
+  .svc-head h2 { font-size: var(--t-3); }
+  .svc-summary { color: var(--ink-soft); max-width: 52ch; }
+
+  .svc-price { display: flex; flex-direction: column; gap: .15rem; text-align: right; flex: 0 0 auto; }
+  @media (max-width: 40rem) { .svc-price { text-align: left; } }
+  .svc-rate {
+    font-family: var(--f-sans);
+    font-size: var(--t-3);
+    font-weight: 500;
+    color: var(--brand);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .svc-rate-note { font-size: .8125rem; color: var(--ink-faint); max-width: 22ch; }
+
+  .svc-meta {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: .9rem 1.5rem; margin: 0;
+    padding: 1rem 0;
+    border-block: 1px solid var(--rule-soft);
+  }
+  .svc-meta dt {
+    font-size: .6875rem; font-weight: 700; letter-spacing: .13em;
+    text-transform: uppercase; color: var(--ink-faint); margin-bottom: .2rem;
+  }
+  :global(:lang(zh)) .svc-meta dt { letter-spacing: .06em; }
+  .svc-meta dd { margin: 0; font-size: .9375rem; }
+
+  .svc-includes {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: .5rem 1.5rem;
+  }
+  .svc-includes li {
+    font-size: .9375rem; color: var(--ink-soft); max-width: none;
+    display: grid; grid-template-columns: 1.1rem 1fr; gap: .55rem; align-items: start;
+  }
+  .svc-includes :global(.tick) { color: var(--accent); margin-top: .3rem; }
+
+  .svc-body :global(p), .svc-body :global(li) { color: var(--ink-soft); }
+  .svc-body :global(h3) { font-size: var(--t-1); margin-top: .5rem; }
+
+  .svc-cta { margin-top: .25rem; }
+
+  .two-col {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+    gap: 2.5rem 3rem; align-items: start;
+  }
+  .h-sub { font-family: var(--f-sans); font-size: var(--t-2); font-weight: 600; }
+
+  .scope { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .55rem; }
+  .scope li {
+    font-size: .9375rem; color: var(--ink-soft);
+    padding-left: 1.1rem; position: relative; max-width: none;
+  }
+  .scope li::before {
+    content: ""; position: absolute; left: 0; top: .62em;
+    width: .4rem; height: .4rem; background: var(--brand); border-radius: 50%;
+  }
+
+  .terms { margin: 0; display: flex; flex-direction: column; gap: 0; }
+  .term { padding-block: .8rem; border-top: 1px solid var(--rule); }
+  .term:last-child { border-bottom: 1px solid var(--rule); }
+  .term dt { font-weight: 600; font-size: .9375rem; margin-bottom: .15rem; }
+  .term dd { margin: 0; font-size: .9375rem; color: var(--ink-soft); }
+</style>

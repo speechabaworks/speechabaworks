@@ -1,0 +1,270 @@
+---
+import PageHeader from '../PageHeader.astro';
+import StatBand from '../StatBand.astro';
+import CtaBand from '../CtaBand.astro';
+import { path, type Lang, copyFor } from '../../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+
+const copy = {
+  en: {
+    eyebrow: 'Meet Linda',
+    title: 'Linda Chow, MA, CCC-SLP, BCBA',
+    lede: 'A licensed speech-language pathologist and Board Certified Behavior Analyst who spends her working life in the gap between the two fields.',
+    body: [
+      'My work is centered on instructional leadership & planning, knowledge dissemination, and promoting strong interdisciplinary collaboration. I am passionate about expanding awareness of this collaborative approach to the general public, and utilize my bilingual skills to educate professionals in Chinese-speaking communities worldwide.',
+      'East Asian families and communities remain significantly underrepresented in special education advocacy, behavior analysis, and school leadership. I serve as a bridge, not only between disciplines, but between communities that have historically been underrepresented. My bilingual practice opens doors to families who might otherwise navigate these systems alone, and my presence in this field signals to the next generation of Asian professionals that there is a place for them here.',
+    ],
+    rolesTitle: 'What I do now',
+    roles: [
+      {
+        title: 'Instructional coach',
+        org: "The nation's largest public school district",
+        body: 'Leading professional development that integrates SLP and ABA practice for students with autism spectrum disorder — seven years of it, inside a system large enough that anything which works has to work at scale.',
+      },
+      {
+        title: 'Clinical development lead',
+        org: 'Bethel Hearing and Speech Center',
+        body: 'Advancing AI-driven digital therapeutics, and providing clinical consultation and staff training internationally.',
+      },
+      {
+        title: 'Consultant & founder',
+        org: 'Speech & ABA Works',
+        body: 'Consultation for parents, BCBAs, SLPs and educators supporting neurodivergent children from birth to ten, across Mandarin, Cantonese and English-speaking communities.',
+      },
+    ],
+    awardEyebrow: 'Recognition',
+    awardTitle: '2025 Dissemination Award',
+    awardBody: 'From the Speech Pathology and Applied Behavior Analysis Special Interest Group (SPABA) of the Association for Behavior Analysis International, for “Integrating Applied Behavior Analysis (ABA) and Speech-Language Pathology (SLP): A Collaborative Classroom Model for an Early Childhood Specialized Program for Students with Autism.”',
+    expertiseTitle: 'Where I am most useful',
+    expertise: [
+      'Integrating ABA and SLP intervention for limited vocal learners',
+      'Advanced language programming beyond early verbal behavior',
+      'AAC selection, implementation, and the abandonment problem',
+      'Positive behavior support inside real school practice',
+      'Bilingual language development in Chinese-English families',
+      'Neuroaffirming collaborative therapy across disciplines',
+    ],
+    langTitle: 'Languages',
+    langBody: 'I consult in English, Cantonese and Mandarin. This matters more than it sounds: most of the literature, most of the training, and most of the professional conversation in both of my fields happens in English, which leaves Chinese-speaking families and clinicians reading translations of translations. Very few people publicly advocate for SLP–ABA integration in the Chinese-speaking communities.',
+    ctaTitle: 'Bring me something difficult',
+  },
+
+  zh: {
+    eyebrow: '認識 Linda',
+    title: 'Linda Chow, MA, CCC-SLP, BCBA',
+    lede: '領有執照的語言治療師，同時是國際認證行為分析師——而她的職業生涯，就花在這兩個領域之間的那道縫隙裡。',
+    body: [
+      '我的工作聚焦於教學領導與規劃、知識傳播，以及推動紮實的跨專業協作。我熱衷於向大眾推廣這種協作取向，並運用我的雙語能力，為全球華語社群的專業人員提供教育。',
+      '在特殊教育權益倡議、行為分析與學校領導這幾個領域中，東亞家庭與社群的代表性仍然明顯不足。我扮演橋樑的角色，不只是在專業之間，也在長期代表性不足的社群之間。我的雙語實務為那些原本可能得獨自摸索這些制度的家庭打開了大門；而我在這個領域裡的存在，也向下一代亞裔專業人員傳達一件事：這裡有他們的位置。',
+    ],
+    rolesTitle: '目前的角色',
+    roles: [
+      {
+        title: '教學教練',
+        org: '全美最大公立學區',
+        body: '帶領整合 SLP 與 ABA 實務的專業發展，服務自閉症光譜學生——已經七年。在一個這麼大的系統裡，任何有效的做法都必須能被規模化。',
+      },
+      {
+        title: '臨床發展負責人',
+        org: 'Bethel 聽語中心',
+        body: '推動 AI 數位療法的臨床發展，並在國際間提供臨床諮詢與員工訓練。',
+      },
+      {
+        title: '顧問與創辦人',
+        org: 'Speech & ABA Works',
+        body: '為家長、BCBA、語言治療師與教育工作者提供諮詢，服務 0 至 10 歲的神經多樣性兒童，橫跨國語、廣東話與英語社群。',
+      },
+    ],
+    awardEyebrow: '專業肯定',
+    awardTitle: '2025 年推廣獎',
+    awardBody: '由國際行為分析學會（ABAI）語言治療與應用行為分析特殊興趣小組（SPABA）頒發，表彰其研究〈整合應用行為分析與語言治療：自閉症幼兒特教班的協作課堂模式〉。',
+    expertiseTitle: '我最能幫上忙的地方',
+    expertise: [
+      '為低口語學習者整合 ABA 與 SLP 的介入',
+      '超越早期語言行為的進階語言方案設計',
+      'AAC 的選配、導入，以及「被放棄」這個難題',
+      '真實校園實務中的正向行為支持',
+      '華英雙語家庭的語言發展',
+      '跨專業、肯定神經多樣性的協作治療',
+    ],
+    langTitle: '語言',
+    langBody: '我以英文、廣東話與國語提供諮詢。這件事比聽起來更重要：我這兩個領域的文獻、訓練與專業對話，絕大多數發生在英文世界，於是華語家庭與臨床工作者讀到的，往往是翻譯的翻譯。在華語社群中，公開倡議 SLP–ABA 整合的人非常少。',
+    ctaTitle: '把難題帶來給我',
+  },
+} as const;
+
+const c = copyFor(copy, lang);
+---
+
+<PageHeader eyebrow={c.eyebrow} title={c.title} lede={c.lede} />
+
+<StatBand lang={lang} tone="tint" />
+
+<section class="band">
+  <div class="shell shell--wide bio-layout">
+    <div class="bio-main stack stack-5">
+      <div class="prose">
+        {c.body.map((p) => <p>{p}</p>)}
+      </div>
+
+      <div class="stack stack-4">
+        <h2 class="h-sub">{c.rolesTitle}</h2>
+        <ul class="roles">
+          {c.roles.map((r) => (
+            <li class="role">
+              <div class="role-head">
+                <h3>{r.title}</h3>
+                <p class="role-org">{r.org}</p>
+              </div>
+              <p class="role-body">{r.body}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <aside class="bio-side stack stack-5">
+      <figure class="portrait">
+        <img src="/images/linda-portrait.jpg" alt="Linda Chow" width="900" height="1125" loading="lazy" />
+        <figcaption class="creds">
+          {/* `brandmark` is deliberate: BrandMark.astro's inline script swaps
+              every .brandmark img when the reader has stamped an explicit
+              theme, which <picture> alone cannot do. */}
+          <picture class="brandmark cred-asha">
+            <source srcset="/images/asha-ccc-slp-dark.png" media="(prefers-color-scheme: dark)" />
+            <img
+              src="/images/asha-ccc-slp.png"
+              alt="ASHA Certificate of Clinical Competence in Speech-Language Pathology"
+              width="938"
+              height="190"
+              loading="lazy"
+            />
+          </picture>
+
+          <p class="cred-bcba">
+            <span class="cred-abbr">BCBA</span>
+            <span class="cred-full">Board Certified Behavior Analyst</span>
+          </p>
+        </figcaption>
+      </figure>
+
+      <div class="award">
+        <p class="eyebrow">{c.awardEyebrow}</p>
+        <h3>{c.awardTitle}</h3>
+        <p class="small">{c.awardBody}</p>
+      </div>
+
+      <div class="stack stack-2">
+        <h3 class="h-sub">{c.expertiseTitle}</h3>
+        <ul class="expertise">
+          {c.expertise.map((e) => <li>{e}</li>)}
+        </ul>
+      </div>
+
+      <div class="stack stack-2">
+        <h3 class="h-sub">{c.langTitle}</h3>
+        <p class="small muted">{c.langBody}</p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<CtaBand lang={lang} title={c.ctaTitle} />
+
+<style>
+  .bio-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+  @media (max-width: 56rem) { .bio-layout { grid-template-columns: 1fr; } }
+
+  .h-sub { font-family: var(--f-sans); font-size: var(--t-2); font-weight: 600; }
+
+  .roles { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; }
+  .roles li { max-width: none; }
+  .role {
+    display: flex; flex-direction: column; gap: .5rem;
+    padding-block: 1.35rem;
+    border-top: 1px solid var(--rule);
+  }
+  .role:last-child { border-bottom: 1px solid var(--rule); }
+  .role-head { display: flex; flex-direction: column; gap: .1rem; }
+  .role-head h3 { font-size: var(--t-1); }
+  .role-org { font-size: .8125rem; letter-spacing: .05em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+  :global(:lang(zh)) .role-org { text-transform: none; letter-spacing: .03em; }
+  .role-body { color: var(--ink-soft); font-size: .9375rem; }
+
+  .portrait { margin: 0; display: flex; flex-direction: column; gap: .85rem; }
+  .portrait > img {
+    width: 100%;
+    border-radius: 3px;
+    border: 1px solid var(--rule);
+    box-shadow: var(--shadow-sm);
+  }
+  /* Both credential marks sit directly on the page ground — no white
+     plate. The ASHA artwork is a cut-out PNG with a light-ink variant for
+     dark mode, since its wordmark is a dark taupe that vanishes there. */
+  .creds {
+    display: flex; flex-direction: column; gap: .85rem;
+    padding-top: .95rem;
+    border-top: 1px solid var(--rule);
+  }
+  .cred-asha { display: block; }
+  .cred-asha img {
+    width: min(11.5rem, 70%);
+    height: auto;
+  }
+
+  .cred-bcba {
+    display: flex; flex-direction: column; gap: .1rem;
+    max-width: none; margin: 0;
+  }
+  .cred-abbr {
+    font-family: var(--f-sans);
+    font-size: 1.15rem; font-weight: 700; letter-spacing: .045em;
+    color: var(--brand); line-height: 1.1;
+  }
+  .cred-full {
+    font-size: .7rem; font-weight: 600; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--ink-faint); line-height: 1.35;
+  }
+  :global(:lang(zh)) .cred-full { letter-spacing: .04em; }
+
+  .bio-side { position: sticky; top: 6rem; }
+  @media (max-width: 56rem) { .bio-side { position: static; } }
+
+  .award {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    border-radius: 3px;
+    padding: 1.25rem 1.3rem 1.35rem;
+    display: flex; flex-direction: column; gap: .5rem;
+    box-shadow: var(--shadow-sm);
+  }
+  .award h3 { font-size: var(--t-1); }
+  .award p { color: var(--ink-soft); }
+
+  .expertise {
+    list-style: none; margin: 0; padding: 0;
+    display: flex; flex-direction: column; gap: .55rem;
+  }
+  .expertise li {
+    font-size: .9375rem;
+    color: var(--ink-soft);
+    padding-left: 1.1rem;
+    position: relative;
+    max-width: none;
+  }
+  .expertise li::before {
+    content: "";
+    position: absolute; left: 0; top: .62em;
+    width: .4rem; height: .4rem;
+    background: var(--brand);
+    border-radius: 50%;
+  }
+</style>

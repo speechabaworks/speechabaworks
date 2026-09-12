@@ -1,0 +1,194 @@
+---
+import PageHeader from '../PageHeader.astro';
+import CtaBand from '../CtaBand.astro';
+import { path, type Lang, copyFor } from '../../i18n/ui';
+import { byLang, sortByOrder, sortByDateDesc, formatMonth } from '../../lib/content';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+
+const partners = sortByOrder(await byLang('partners', lang));
+const talks = sortByDateDesc(await byLang('talks', lang));
+
+const kindLabel = {
+  en: { podcast: 'Podcast', workshop: 'Workshop', training: 'Training', conference: 'Conference', keynote: 'Keynote' },
+  zh: { podcast: '播客', workshop: '工作坊', training: '專業訓練', conference: '研討會', keynote: '主題演講' },
+} as const;
+
+const copy = {
+  en: {
+    eyebrow: 'Partners & talks',
+    title: 'Collaboration, speaking, and the places this work has traveled',
+    lede: 'Most of what I do reaches people through someone else — a clinic that invites me in, a school that runs the training, a podcast that puts the argument in front of an audience I would never reach alone.',
+    openTitle: 'What I am open to',
+    open: [
+      { name: 'Speaking & podcasts', body: 'Conferences, professional bodies, and podcasts — in English, Cantonese or Mandarin. I am particularly interested in audiences who are skeptical of ABA, because that is where the conversation is worth having.' },
+      { name: 'Clinical partnerships', body: 'Ongoing consultation for clinics and agencies building integrated SLP–ABA practice, rather than a one-off workshop that fades by the following term.' },
+      { name: 'Training programs', body: 'Designing and delivering professional development for schools, early intervention agencies, and teams working across both disciplines.' },
+      { name: 'Research & dissemination', body: 'Collaborative classroom models, translation of practice into Chinese-speaking contexts, and getting findings to the practitioners who need them.' },
+    ],
+    partnersTitle: 'Organizations I have worked with',
+    talksTitle: 'Recent talks & appearances',
+    ctaTitle: 'Something you want to build together?',
+    ctaBody: 'Tell me what you have in mind — a training, an episode, a collaboration, a problem your team keeps circling. I answer everything within two business days.',
+  },
+  zh: {
+    eyebrow: '合作夥伴與演講',
+    title: '合作、演講，以及這份工作去過的地方',
+    lede: '我做的事，大多是透過別人才觸及到人的——一間邀請我進去的診所、一所開辦訓練的學校、一個把這場討論帶到我單靠自己無法觸及的聽眾面前的播客。',
+    openTitle: '我開放的合作形式',
+    open: [
+      { name: '演講與播客', body: '研討會、專業團體與播客，可用英文、廣東話或國語。我特別歡迎對 ABA 抱持懷疑的聽眾——那正是這場對話最值得發生的地方。' },
+      { name: '臨床合作', body: '為正在建立 SLP–ABA 整合實務的診所與機構提供持續諮詢，而不是一場下個學期就淡掉的單次工作坊。' },
+      { name: '訓練方案', body: '為學校、早療機構，以及橫跨兩個專業的團隊，設計並執行專業發展課程。' },
+      { name: '研究與推廣', body: '協作課堂模式、將實務轉譯進華語語境，以及把研究結果送到真正需要它的第一線工作者手上。' },
+    ],
+    partnersTitle: '合作過的組織',
+    talksTitle: '近期演講與節目',
+    ctaTitle: '有想一起做的事嗎？',
+    ctaBody: '告訴我你的想法——一場訓練、一集節目、一個合作案，或是你的團隊一直繞不出去的問題。所有訊息我都會在兩個工作天內回覆。',
+  },
+} as const;
+
+const c = copyFor(copy, lang);
+---
+
+<PageHeader eyebrow={c.eyebrow} title={c.title} lede={c.lede} />
+
+<section class="band">
+  <div class="shell shell--wide stack stack-5">
+    <h2 class="h-sub">{c.openTitle}</h2>
+    <ul class="open-grid">
+      {c.open.map((o) => (
+        <li class="open">
+          <h3>{o.name}</h3>
+          <p>{o.body}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+{partners.length > 0 && (
+  <section class="band band--tint">
+    <div class="shell shell--wide stack stack-5">
+      <h2 class="h-sub">{c.partnersTitle}</h2>
+      <ul class="partner-grid">
+        {partners.map((p) => (
+          <li class="partner">
+            <h3>{p.data.name}</h3>
+            <p class="partner-region">{p.data.region}</p>
+            <p class="partner-note">{p.data.note}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
+
+{talks.length > 0 && (
+  <section class="band">
+    <div class="shell shell--wide stack stack-5">
+      <h2 class="h-sub">{c.talksTitle}</h2>
+      <ol class="talks">
+        {talks.map((tk) => (
+          <li class="talk">
+            <div class="talk-when">
+              <time datetime={tk.data.date.toISOString().slice(0, 10)}>{formatMonth(tk.data.date, lang)}</time>
+              <span class="talk-kind">{copyFor(kindLabel, lang)[tk.data.kind]}</span>
+            </div>
+            {tk.data.image && (
+              <a class="talk-thumb" href={tk.data.link ?? undefined} aria-hidden={tk.data.link ? undefined : 'true'} tabindex={tk.data.link ? undefined : -1}>
+                <img src={tk.data.image} alt={tk.data.imageAlt ?? ''} loading="lazy" width="440" height="300" />
+              </a>
+            )}
+            <div class="talk-body">
+              <h3>
+                {tk.data.link
+                  ? <a href={tk.data.link} rel="noopener">{tk.data.title}</a>
+                  : tk.data.title}
+              </h3>
+              <p class="talk-host">{tk.data.host}{tk.data.location ? ` · ${tk.data.location}` : ''}</p>
+              <p class="talk-summary">{tk.data.summary}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+)}
+
+<CtaBand lang={lang} title={c.ctaTitle} body={c.ctaBody} />
+
+<style>
+  .h-sub { font-family: var(--f-sans); font-size: var(--t-3); font-weight: 500; }
+
+  .open-grid, .partner-grid {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: 1.5rem 2rem;
+  }
+  .open-grid li, .partner-grid li { max-width: none; }
+
+  .open { display: flex; flex-direction: column; gap: .5rem; padding-top: 1rem; border-top: 2px solid var(--brand); }
+  .open h3 { font-size: var(--t-1); }
+  .open p { font-size: .9375rem; color: var(--ink-soft); }
+
+  .partner {
+    display: flex; flex-direction: column; gap: .3rem;
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 3px;
+    padding: 1.25rem 1.25rem 1.35rem;
+    box-shadow: var(--shadow-sm);
+  }
+  .partner h3 { font-size: var(--t-1); }
+  .partner-region {
+    font-size: .75rem; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+  :global(:lang(zh)) .partner-region { letter-spacing: .04em; text-transform: none; }
+  .partner-note { font-size: .9375rem; color: var(--ink-soft); }
+
+  .talks { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; counter-reset: none; }
+  .talks li { max-width: none; }
+  .talk {
+    display: grid;
+    grid-template-columns: 8.5rem 11rem 1fr;
+    gap: .4rem 1.6rem;
+    padding-block: 1.6rem;
+    border-top: 1px solid var(--rule);
+    align-items: start;
+  }
+  /* Rows without an image close the gap rather than leaving a hole. */
+  .talk:not(:has(.talk-thumb)) { grid-template-columns: 8.5rem 1fr; }
+
+  .talk-thumb {
+    display: block; overflow: hidden;
+    border: 1px solid var(--rule); border-radius: 3px;
+    background: var(--surface);
+  }
+  .talk-thumb img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+  .talk:last-child { border-bottom: 1px solid var(--rule); }
+  @media (max-width: 56rem) {
+    .talk, .talk:not(:has(.talk-thumb)) { grid-template-columns: 8.5rem 1fr; }
+    .talk-thumb { grid-column: 2; max-width: 14rem; margin-bottom: .3rem; }
+  }
+  @media (max-width: 42rem) {
+    .talk, .talk:not(:has(.talk-thumb)) { grid-template-columns: 1fr; gap: .5rem; }
+    .talk-thumb { grid-column: 1; }
+  }
+
+  .talk-when { display: flex; flex-direction: column; gap: .25rem; padding-top: .15rem; }
+  .talk-when time { font-size: .875rem; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .talk-kind {
+    font-size: .6875rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-faint); font-weight: 600;
+  }
+  :global(:lang(zh)) .talk-kind { letter-spacing: .05em; text-transform: none; font-size: .75rem; }
+
+  .talk-body { display: flex; flex-direction: column; gap: .3rem; }
+  .talk-body h3 { font-size: var(--t-1); }
+  .talk-body h3 a { text-decoration: none; }
+  .talk-body h3 a:hover { text-decoration: underline; }
+  .talk-host { font-size: .875rem; color: var(--accent); font-weight: 600; }
+  .talk-summary { font-size: .9375rem; color: var(--ink-soft); }
+</style>

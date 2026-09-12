@@ -1,0 +1,84 @@
+---
+import { copyFor, isZh, type Lang } from '../i18n/ui';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+
+const copy = {
+  en: { left: 'Speech-Language Pathology', right: 'Applied Behavior Analysis', middle: 'One integrated plan' },
+  zh: { left: '語言治療 SLP', right: '應用行為分析 ABA', middle: '一份整合計畫' },
+} as const;
+const c = copyFor(copy, lang);
+---
+
+<figure class="venn">
+  <svg viewBox="0 0 340 236" role="img" aria-labelledby="venn-title" class="venn-svg">
+    <title id="venn-title">
+      {isZh(lang)
+        ? '語言治療與應用行為分析兩個圓的交集，代表一份整合的溝通計畫。'
+        : 'Two overlapping circles — speech-language pathology and applied behavior analysis — meeting in one integrated communication plan.'}
+    </title>
+
+    <defs>
+      <clipPath id="venn-clip-left"><circle cx="128" cy="112" r="76" /></clipPath>
+    </defs>
+
+    <circle cx="128" cy="112" r="76" class="venn-fill venn-fill--a" />
+    <circle cx="212" cy="112" r="76" class="venn-fill venn-fill--b" />
+    <g clip-path="url(#venn-clip-left)">
+      <circle cx="212" cy="112" r="76" class="venn-overlap" />
+    </g>
+    <circle cx="128" cy="112" r="76" class="venn-ring" />
+    <circle cx="212" cy="112" r="76" class="venn-ring" />
+
+    <text x="66" y="116" class="venn-label venn-label--a" text-anchor="middle">SLP</text>
+    <text x="274" y="116" class="venn-label venn-label--b" text-anchor="middle">ABA</text>
+    <text x="170" y="226" class="venn-caption" text-anchor="middle">{c.middle}</text>
+  </svg>
+
+  <figcaption class="venn-legend">
+    <span class="venn-key"><i class="dot dot--a" aria-hidden="true"></i>{c.left}</span>
+    <span class="venn-key"><i class="dot dot--b" aria-hidden="true"></i>{c.right}</span>
+  </figcaption>
+</figure>
+
+<style>
+  .venn { margin: 0; display: flex; flex-direction: column; gap: 1rem; align-items: center; }
+  .venn-svg { width: 100%; max-width: 22rem; height: auto; overflow: visible; }
+
+  .venn-fill--a { fill: var(--brand); opacity: .16; }
+  .venn-fill--b { fill: var(--accent); opacity: .16; }
+  .venn-overlap { fill: var(--brand); opacity: .3; }
+  .venn-ring { fill: none; stroke: var(--brand); stroke-width: 1.4; opacity: .45; }
+
+  .venn-label {
+    font-family: var(--f-sans);
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: .02em;
+  }
+  .venn-label--a { fill: var(--brand); }
+  .venn-label--b { fill: var(--accent); }
+
+  .venn-caption {
+    font-family: var(--f-body);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    fill: var(--ink-faint);
+  }
+  :global(:lang(zh)) .venn-caption { letter-spacing: .06em; text-transform: none; font-size: 14px; }
+
+  .venn-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .5rem 1.4rem;
+    font-size: .8125rem;
+    color: var(--ink-soft);
+  }
+  .venn-key { display: inline-flex; align-items: center; gap: .45rem; }
+  .dot { width: .6rem; height: .6rem; border-radius: 50%; display: inline-block; flex: 0 0 auto; }
+  .dot--a { background: var(--brand); }
+  .dot--b { background: var(--accent); }
+</style>

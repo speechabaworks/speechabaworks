@@ -1,0 +1,437 @@
+/* ============================================================
+   Speech & ABA Works — design system
+
+   Palette : deep pine #24564D with a copper accent, on a cool
+             near-white ground.
+   Type    : Literata for headings, Source Sans 3 for body.
+             Noto Serif HK / Noto Sans HK carry the Chinese glyphs
+             neither Latin face contains — the Hong Kong glyph
+             standard, so Traditional pages use the forms a Hong
+             Kong reader expects. The SC faces sit behind them in
+             each stack and pick up the Simplified pages, where
+             mainland China has a single standard.
+
+   Colours are named by role (--brand, --accent) rather than by
+   hue, so a future palette change touches this file only.
+   ============================================================ */
+
+:root {
+  /* ---- cool near-white grounds ---- */
+  --paper:      #F6F8F6;
+  --surface:    #FFFFFF;
+  --surface-2:  #EEF2EF;
+  --surface-3:  #E4EAE5;
+
+  /* ---- ink ---- */
+  --ink:        #16211E;
+  --ink-soft:   #4E5C57;
+  --ink-faint:  #78857F;
+  --rule:       #DCE4DF;
+  --rule-soft:  #E9EFEA;
+
+  /* ---- brand: deep pine ---- */
+  --brand:       #24564D;
+  --brand-deep:  #16352F;
+  --brand-mid:   #2F7D6C;
+  --brand-tint:  #E4EDE9;
+
+  /* ---- accent: copper ---- */
+  --accent:       #B0672B;
+  --accent-soft:  #C98A4E;
+  --accent-tint:  #FAEDDF;
+
+  /* ---- inverted band ---- */
+  --band-bg:    #16352F;
+  --band-fg:    #F1F6F2;
+  --band-fg-dim:#B9CCC4;
+  --band-accent:#E8B577;
+  --on-accent:  #1A1006;
+
+  --focus:      #B0672B;
+
+  /* ---- type ---- */
+  --f-serif: Literata, "Noto Serif HK", "Noto Serif SC", ui-serif, Georgia, serif;
+  --f-sans: "Source Sans 3", "Noto Sans HK", "Noto Sans SC", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --t--2: 0.75rem;
+  --t--1: 0.8125rem;
+  --t-0:  1rem;
+  --t-1:  1.125rem;
+  --t-2:  1.375rem;
+  --t-3:  1.75rem;
+  --t-4:  2.25rem;
+  --t-5:  clamp(2.35rem, 1.5rem + 3.2vw, 3.5rem);
+
+  --measure: 66ch;
+  --gutter: clamp(1.15rem, 4vw, 2.5rem);
+  --page: 68rem;
+  --band: clamp(3.5rem, 8vw, 6rem);
+  --navh: 4.5rem;
+
+  --shadow-sm: 0 1px 2px rgba(22, 33, 30, .06);
+  --shadow-md: 0 4px 18px -8px rgba(22, 33, 30, .20);
+  --shadow-lg: 0 12px 40px -18px rgba(22, 33, 30, .32);
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper:      #0E1513;
+    --surface:    #16201D;
+    --surface-2:  #1C2724;
+    --surface-3:  #22302B;
+
+    --ink:        #E7EEEA;
+    --ink-soft:   #A5B2AC;
+    --ink-faint:  #7C8A84;
+    --rule:       #2A3733;
+    --rule-soft:  #212C29;
+
+    --brand:       #74BCA9;
+    --brand-deep:  #A6D6C7;
+    --brand-mid:   #57A691;
+    --brand-tint:  #1A2B27;
+
+    --accent:       #DFA268;
+    --accent-soft:  #EBBE90;
+    --accent-tint:  #2A211A;
+
+    --band-bg:    #10231F;
+    --band-fg:    #E7EEEA;
+    --band-fg-dim:#AABAB3;
+    --band-accent:#E8B577;
+    --on-accent:  #1A1006;
+
+    --focus:      #DFA268;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, .45);
+    --shadow-md: 0 4px 18px -8px rgba(0, 0, 0, .7);
+    --shadow-lg: 0 12px 40px -18px rgba(0, 0, 0, .85);
+
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --paper:      #0E1513;
+  --surface:    #16201D;
+  --surface-2:  #1C2724;
+  --surface-3:  #22302B;
+
+  --ink:        #E7EEEA;
+  --ink-soft:   #A5B2AC;
+  --ink-faint:  #7C8A84;
+  --rule:       #2A3733;
+  --rule-soft:  #212C29;
+
+  --brand:       #74BCA9;
+  --brand-deep:  #A6D6C7;
+  --brand-mid:   #57A691;
+  --brand-tint:  #1A2B27;
+
+  --accent:       #DFA268;
+  --accent-soft:  #EBBE90;
+  --accent-tint:  #2A211A;
+
+  --band-bg:    #10231F;
+  --band-fg:    #E7EEEA;
+  --band-fg-dim:#AABAB3;
+  --band-accent:#E8B577;
+  --on-accent:  #1A1006;
+
+  --focus:      #DFA268;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .45);
+  --shadow-md: 0 4px 18px -8px rgba(0, 0, 0, .7);
+  --shadow-lg: 0 12px 40px -18px rgba(0, 0, 0, .85);
+
+  color-scheme: dark;
+}
+
+/* ============================================================ base */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--navh) + 1rem); }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+body {
+  margin: 0;
+  padding-top: var(--navh);          /* clears the fixed navigation bar */
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--f-sans);
+  font-size: var(--t-0);
+  font-weight: 400;
+  line-height: 1.68;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+:lang(zh) { line-height: 1.9; }
+
+/* The default stacks put the Hong Kong faces first, which is right for
+   the Traditional pages. On the Simplified pages the SC faces lead, so a
+   page never mixes two Chinese designs through per-character fallback. */
+:lang(zh-Hans) {
+  --f-serif: Literata, "Noto Serif SC", ui-serif, Georgia, serif;
+  --f-sans: "Source Sans 3", "Noto Sans SC", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+img, svg, video { max-width: 100%; height: auto; display: block; }
+
+/* Literata carries the headings; Source Sans 3 the body. The family
+   contrast does the hierarchy work, so the tracking stays gentle. */
+h1, h2, h3, h4 {
+  font-family: var(--f-serif);
+  font-weight: 500;
+  line-height: 1.16;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+  margin: 0;
+  color: var(--ink);
+}
+h1 { font-size: var(--t-5); letter-spacing: -0.015em; line-height: 1.12; }
+h2 { font-size: var(--t-4); }
+h3 { font-size: var(--t-2); font-weight: 600; letter-spacing: -0.006em; }
+h4 { font-size: var(--t-1); font-weight: 600; letter-spacing: 0; }
+
+/* Display numerals belong to the same editorial voice as the headings. */
+.stat-value, .step-n, .svc-rate, .figure-value { font-family: var(--f-serif); }
+
+:lang(zh) h1, :lang(zh) h2, :lang(zh) h3 { letter-spacing: 0.005em; font-weight: 600; }
+:lang(zh) h1, :lang(zh) h2 { line-break: strict; }
+
+p { margin: 0; }
+p, li { max-width: var(--measure); }
+
+a { color: var(--brand); text-underline-offset: 2px; text-decoration-thickness: 1px; }
+a:hover { color: var(--accent); }
+
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
+
+strong { font-weight: 600; }
+hr { border: 0; border-top: 1px solid var(--rule); margin: 0; }
+::selection { background: var(--accent-tint); color: var(--ink); }
+
+/* ============================================================ layout */
+
+.shell { width: 100%; max-width: var(--page); margin-inline: auto; padding-inline: var(--gutter); }
+.shell--wide { max-width: 78rem; }
+
+/* Sections alternate ground so the page reads as distinct blocks
+   when skimmed. `.band--tint` is the beige step; `.band--brand`
+   is the full inversion used for the closing call to action. */
+/* `clip` rather than `hidden` — it contains the decorative arcs without
+   creating a scroll container. Without it the negatively positioned
+   .geo shapes widen the document and the whole page scrolls sideways. */
+.band { padding-block: var(--band); position: relative; overflow: clip; }
+.band--tint { background: var(--surface-2); }
+.band--deep { background: var(--surface-3); }
+.band--brand { background: var(--band-bg); color: var(--band-fg); }
+.band--brand h1, .band--brand h2, .band--brand h3, .band--brand h4 { color: var(--band-fg); }
+.band--brand p { color: var(--band-fg-dim); }
+.band--brand a:not(.btn) { color: var(--band-accent); }
+
+/* A fine paper grain, applied to the tinted bands only. Two stacked
+   repeating gradients at very low alpha — no image request. */
+.band--tint::before,
+.band--deep::before,
+.band--brand::before {
+  content: "";
+  position: absolute; inset: 0;
+  pointer-events: none;
+  opacity: .5;
+  background-image:
+    repeating-linear-gradient(45deg,  rgba(22,33,30,.020) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(-45deg, rgba(22,33,30,.016) 0 1px, transparent 1px 6px);
+}
+.band--brand::before {
+  background-image:
+    repeating-linear-gradient(45deg,  rgba(241,246,242,.026) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(-45deg, rgba(241,246,242,.020) 0 1px, transparent 1px 6px);
+}
+.band > * { position: relative; z-index: 1; }
+
+.stack { display: flex; flex-direction: column; }
+.stack-1 { gap: .35rem; } .stack-2 { gap: .7rem; } .stack-3 { gap: 1.1rem; }
+.stack-4 { gap: 1.75rem; } .stack-5 { gap: 2.5rem; } .stack-6 { gap: 3.5rem; }
+
+.prose { display: flex; flex-direction: column; gap: 1.1rem; }
+.prose h2 { margin-top: 1.2rem; }
+.prose h3 { margin-top: .8rem; }
+.prose ul, .prose ol { margin: 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: .45rem; }
+.prose li::marker { color: var(--accent); }
+.prose blockquote {
+  margin: .6rem 0;
+  padding-left: 1.15rem;
+  border-left: 3px solid var(--accent);
+  font-size: var(--t-1);
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+/* ============================================================ geometry
+   Decorative arcs echoing the infinity mark. Purely atmospheric,
+   never carrying meaning, and hidden from assistive technology. */
+
+.geo {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  opacity: .12;
+  color: var(--brand);
+}
+.band--brand .geo { color: var(--band-accent); opacity: .18; }
+.geo--a { width: 18rem; height: 18rem; top: -6rem; right: -5rem; }
+.geo--b { width: 11rem; height: 11rem; bottom: -3.5rem; left: -3rem; }
+.geo--solid { background: currentColor; border: 0; opacity: .05; }
+@media (max-width: 48rem) { .geo { display: none; } }
+
+/* ============================================================ type utilities */
+
+.eyebrow {
+  font-size: var(--t--2);
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+:lang(zh) .eyebrow { letter-spacing: .1em; }
+.band--brand .eyebrow { color: var(--band-accent); }
+.band--brand .lede, .band--brand .muted { color: var(--band-fg-dim); }
+
+.lede {
+  font-family: var(--f-serif);
+  font-size: var(--t-2);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  max-width: 44ch;
+}
+:lang(zh) .lede { font-weight: 400; max-width: 30ch; }
+.muted { color: var(--ink-soft); }
+.small { font-size: var(--t--1); }
+
+.section-title { display: flex; flex-direction: column; gap: .6rem; max-width: 46ch; }
+
+/* ============================================================ buttons */
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  padding: .78rem 1.5rem;
+  font-family: var(--f-sans);
+  font-size: .9375rem;
+  font-weight: 600;
+  letter-spacing: -.005em;
+  line-height: 1.2;
+  border-radius: 2px;
+  border: 1.5px solid transparent;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color .18s ease, color .18s ease, border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+
+.btn--primary { background: var(--brand); color: var(--paper); border-color: var(--brand); box-shadow: var(--shadow-sm); }
+.btn--primary:hover { background: var(--brand-mid); border-color: var(--brand-mid); color: var(--paper); box-shadow: var(--shadow-md); }
+:root[data-theme="dark"] .btn--primary,
+:root[data-theme="dark"] .btn--primary:hover { color: #0E1513; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .btn--primary,
+  :root:not([data-theme="light"]) .btn--primary:hover { color: #0E1513; }
+}
+
+.btn--ghost { background: transparent; color: var(--brand); border-color: var(--rule); }
+.btn--ghost:hover { border-color: var(--brand); color: var(--brand); background: var(--brand-tint); }
+
+.band--brand .btn--primary,
+.band--brand .btn--primary:hover { background: var(--band-accent); border-color: var(--band-accent); color: var(--on-accent); }
+.band--brand .btn--primary:hover { filter: brightness(1.07); }
+.band--brand .btn--ghost { color: var(--band-fg); border-color: color-mix(in srgb, var(--band-fg) 38%, transparent); }
+.band--brand .btn--ghost:hover { border-color: var(--band-fg); color: var(--band-fg); background: rgba(241,246,242,.08); }
+
+.btn-row { display: flex; flex-wrap: wrap; gap: .75rem; }
+
+.arrow-link {
+  display: inline-flex; align-items: center; gap: .45rem;
+  font-weight: 600; text-decoration: none;
+  font-size: .9375rem; letter-spacing: -.005em;
+}
+.arrow-link svg { transition: transform .18s ease; flex: 0 0 auto; }
+.arrow-link:hover svg { transform: translateX(3px); }
+.arrow-link--back:hover svg { transform: translateX(-3px); }
+
+/* ============================================================ grids */
+
+.grid { display: grid; gap: 1.5rem; }
+.grid--2 { grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr)); }
+.grid--3 { grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
+.grid--4 { grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
+
+/* ============================================================ cards */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 1.6rem 1.5rem 1.7rem;
+  display: flex; flex-direction: column; gap: .6rem;
+  box-shadow: var(--shadow-sm);
+}
+.card h3 { font-size: var(--t-1); }
+
+/* ============================================================ tables */
+
+.table-scroll { overflow-x: auto; border: 1px solid var(--rule); border-radius: 3px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 32rem; font-size: var(--t--1); }
+th, td { text-align: left; padding: .8rem 1rem; border-bottom: 1px solid var(--rule-soft); vertical-align: top; }
+thead th {
+  font-size: var(--t--2); letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink-faint); font-weight: 600; border-bottom: 1px solid var(--rule);
+}
+tbody tr:last-child td { border-bottom: none; }
+.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* ============================================================ forms */
+
+.field { display: flex; flex-direction: column; gap: .35rem; }
+.field label { font-size: var(--t--1); font-weight: 600; color: var(--ink-soft); }
+.field input, .field select, .field textarea {
+  font-family: var(--f-sans);
+  font-size: var(--t-0);
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: .65rem .8rem;
+  width: 100%;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: 2px solid var(--focus); outline-offset: 1px; border-color: transparent;
+}
+.field textarea { min-height: 8rem; resize: vertical; }
+
+/* ============================================================ misc */
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.skip-link {
+  position: fixed; left: .5rem; top: -3.5rem; z-index: 200;
+  background: var(--brand); color: var(--paper);
+  padding: .55rem 1rem; border-radius: 4px; text-decoration: none; font-weight: 600;
+  transition: top .15s ease;
+}
+.skip-link:focus { top: .5rem; color: var(--paper); }

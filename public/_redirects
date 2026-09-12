@@ -1,0 +1,16 @@
+# Old GoHighLevel paths → new site. 301 so search rankings carry over.
+/sitemap              /                          301
+/meetlinda            /meet-linda                301
+/partnersandtalks     /collaborate               301
+/about-chinese        /zh-hant                   301
+/testimonials         /                          301
+/faq                  /faqs                      301
+/privacy-policy       /privacy                   301
+/terms-and-conditions /terms                     301
+/service-disclaimer   /disclaimer                301
+
+# Friendly short aliases for the Chinese versions
+/tc                   /zh-hant                   301
+/sc                   /zh-hans                   301
+/zh                   /zh-hant                   301
+/zh/*                 /zh-hant/:splat            301

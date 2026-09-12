@@ -1,0 +1,220 @@
+---
+import PageHeader from '../PageHeader.astro';
+import { useTranslations, site, type Lang, copyFor } from '../../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const copy = {
+  en: {
+    eyebrow: 'Contact',
+    title: 'How to start',
+    lede: 'Send an inquiry and I will reply within two business days. The first conversation is a free twenty-minute call.',
+    bookTitle: 'Start with a discovery call',
+    bookBody: 'Twenty minutes, at no charge and with no obligation. Describe your situation in the form and say roughly when you are free; I will reply with times that work across the difference.',
+    bookButton: 'Go to the form',
+    bookCalendarButton: 'Open the calendar',
+    bookNote: 'Calls run on Google Meet or Zoom.',
+    writeTitle: 'Or write to me',
+    writeBody: 'Describe what you are working on. I read every message myself and reply within two business days.',
+    directTitle: 'Direct',
+    hoursTitle: 'Working across time zones',
+    hoursBody: 'I am based in New York and regularly meet clients in Taiwan, Hong Kong, mainland China, the United Kingdom and Australia. Please propose the times that suit you.',
+  },
+  zh: {
+    eyebrow: '聯絡',
+    title: '如何開始',
+    lede: '傳訊息給我，我會在兩個工作天內回覆。第一次談話是免費的二十分鐘通話。',
+    bookTitle: '從諮詢通話開始',
+    bookBody: '二十分鐘，免費，無需承諾。在表單裡說明你的狀況，並順帶提一下你大致方便的時段，我會回覆幾個能配合時差的時間。',
+    bookButton: '前往表單',
+    bookCalendarButton: '打開行事曆',
+    bookNote: '通話使用 Google Meet 或 Zoom。',
+    writeTitle: '或者寫訊息給我',
+    writeBody: '告訴我你正在處理的事。所有訊息我都親自閱讀，並在兩個工作天內回覆。',
+    directTitle: '直接聯絡',
+    hoursTitle: '跨時區工作',
+    hoursBody: '我在紐約，經常與台灣、香港、中國大陸、英國與澳洲的客戶會談。請提出你方便的時間。',
+  },
+} as const;
+
+const c = copyFor(copy, lang);
+---
+
+<PageHeader eyebrow={c.eyebrow} title={c.title} lede={c.lede} />
+
+<section class="band">
+  <div class="shell shell--wide contact-grid">
+
+    <!-- ─────────── booking -->
+    <div class="panel panel--book">
+      <div class="stack stack-3">
+        <h2>{c.bookTitle}</h2>
+        <p class="muted">{c.bookBody}</p>
+        <p class="book-actions">
+          <a class="btn btn--primary" href="#inquiry">{c.bookButton}</a>
+          {site.booking && (
+            <a class="btn btn--ghost" href={site.booking} rel="noopener">{c.bookCalendarButton}</a>
+          )}
+        </p>
+        <p class="small muted">{c.bookNote}</p>
+      </div>
+
+      <div class="direct stack stack-2">
+        <h3 class="h-mini">{c.directTitle}</h3>
+        <ul class="direct-list">
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          {([['linkedin', 'LinkedIn'], ['instagram', 'Instagram']] as const)
+            .filter(([k]) => site.social[k])
+            .map(([k, label]) => (
+              <li><a href={site.social[k]} rel="me noopener">{label}</a></li>
+            ))}
+        </ul>
+      </div>
+
+      <div class="stack stack-2">
+        <h3 class="h-mini">{c.hoursTitle}</h3>
+        <p class="small muted">{c.hoursBody}</p>
+      </div>
+    </div>
+
+    <!-- ─────────── inquiry form -->
+    <div class="panel panel--form">
+      <div class="stack stack-2">
+        <h2>{c.writeTitle}</h2>
+        <p class="muted">{c.writeBody}</p>
+      </div>
+
+      <form class="inquiry" id="inquiry" data-contact action="/api/contact" method="post">
+        <input type="hidden" name="lang" value={lang} />
+        <div class="hp" aria-hidden="true">
+          <label for="contact-company">Company</label>
+          <input id="contact-company" type="text" name="company" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div class="field">
+          <label for="contact-name">{t('form.name')}</label>
+          <input id="contact-name" type="text" name="name" autocomplete="name" required />
+        </div>
+
+        <div class="field">
+          <label for="contact-email">{t('form.email')}</label>
+          <input id="contact-email" type="email" name="email" autocomplete="email" required />
+        </div>
+
+        <div class="field">
+          <label for="contact-role">{t('form.role')}</label>
+          <select id="contact-role" name="role">
+            <option value="parent">{t('form.role.parent')}</option>
+            <option value="slp">{t('form.role.slp')}</option>
+            <option value="bcba">{t('form.role.bcba')}</option>
+            <option value="educator">{t('form.role.educator')}</option>
+            <option value="other">{t('form.role.other')}</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="contact-language">{t('form.language')}</label>
+          <select id="contact-language" name="preferredLanguage">
+            <option value="english">English</option>
+            <option value="cantonese">廣東話 · Cantonese</option>
+            <option value="mandarin">國語 · Mandarin</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="contact-message">{t('form.message')}</label>
+          <textarea id="contact-message" name="message" required></textarea>
+        </div>
+
+        <button class="btn btn--primary" type="submit">{t('form.send')}</button>
+        <p class="form-status" data-status role="status" aria-live="polite"></p>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .contact-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: clamp(2rem, 5vw, 3.5rem);
+    align-items: start;
+  }
+  @media (max-width: 56rem) { .contact-grid { grid-template-columns: 1fr; } }
+
+  .panel { display: flex; flex-direction: column; gap: 2rem; }
+  .panel h2 { font-size: var(--t-3); }
+
+  .h-mini {
+    font-family: var(--f-body);
+    font-size: .6875rem; font-weight: 700; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--ink-faint);
+  }
+  :global(:lang(zh)) .h-mini { letter-spacing: .06em; text-transform: none; font-size: .8125rem; }
+
+  .direct { padding-top: 1.25rem; border-top: 1px solid var(--rule); }
+  .direct-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .35rem; }
+  .direct-list li { max-width: none; }
+  .direct-list a { font-size: .9375rem; }
+
+  .panel--form {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: clamp(1.4rem, 3vw, 2rem);
+    box-shadow: var(--shadow-md);
+    gap: 1.5rem;
+  }
+
+  .inquiry { display: flex; flex-direction: column; gap: 1rem; scroll-margin-top: calc(var(--navh) + 1rem); }
+  .inquiry button { align-self: flex-start; }
+
+  .book-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
+
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+  .form-status { font-size: .9375rem; margin: 0; }
+  .form-status:empty { display: none; }
+  .form-status[data-state='ok'] { color: var(--brand); font-weight: 600; }
+  .form-status[data-state='error'] { color: #A33B2A; font-weight: 600; }
+</style>
+
+<script>
+  const form = document.querySelector('form[data-contact]') as HTMLFormElement | null;
+  if (form) {
+    const status = form.querySelector('[data-status]') as HTMLElement | null;
+    const button = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!status || !button) return;
+
+      const original = button.textContent;
+      button.disabled = true;
+      status.removeAttribute('data-state');
+      status.textContent = '…';
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: new FormData(form),
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        const data = await res.json().catch(() => ({}) as Record<string, string>);
+        status.setAttribute('data-state', 'ok');
+        status.textContent = data.message ?? 'Thank you — your message is on its way.';
+        form.reset();
+      } catch {
+        status.setAttribute('data-state', 'error');
+        status.textContent = 'That did not send. Please email linda@speechabaworks.com directly.';
+      } finally {
+        button.disabled = false;
+        button.textContent = original;
+      }
+    });
+  }
+</script>

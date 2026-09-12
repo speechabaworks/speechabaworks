@@ -1,0 +1,104 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import {
+  langFromUrl, site, htmlLang, allLangs, path, isZh,
+  type Lang, type RouteKey,
+} from '../i18n/ui';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Which page this is, so the language switcher and hreflang tags line up. */
+  routeKey?: RouteKey;
+  /** For blog posts, where the same post lives in each language. */
+  altHrefs?: { lang: Lang; href: string }[];
+  ogType?: string;
+  noindex?: boolean;
+}
+
+const { title, description, routeKey, altHrefs, ogType = 'website', noindex = false } = Astro.props;
+
+const lang: Lang = langFromUrl(Astro.url);
+const canonical = new URL(Astro.url.pathname.replace(/\/+$/, '') || '/', Astro.site);
+
+const alternates =
+  altHrefs ??
+  (routeKey ? allLangs.map((l) => ({ lang: l, href: path(routeKey, l) })) : []);
+
+const switcher = alternates.filter((a) => a.lang !== lang);
+
+const tagline = isZh(lang)
+  ? '語言治療與應用行為分析整合諮詢'
+  : 'SLP–ABA Integration Consulting';
+const fullTitle = title === site.name ? `${site.name} — ${tagline}` : `${title} · ${site.name}`;
+---
+
+<!doctype html>
+<html lang={htmlLang[lang]}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical.href} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+
+    {alternates.map((a) => (
+      <link rel="alternate" hreflang={htmlLang[a.lang]} href={new URL(a.href, Astro.site).href} />
+    ))}
+    {alternates.length > 0 && (
+      <link
+        rel="alternate"
+        hreflang="x-default"
+        href={new URL(alternates.find((a) => a.lang === 'en')?.href ?? '/', Astro.site).href}
+      />
+    )}
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical.href} />
+    <meta property="og:locale" content={htmlLang[lang].replace('-', '_')} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={site.name} href="/rss.xml" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Sans+HK:wght@400;500;700&family=Noto+Serif+HK:wght@500;600&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@500;600&display=swap"
+    />
+
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'ProfessionalService',
+      name: site.name,
+      alternateName: `${site.nameZh} | ${site.descriptorZh}`,
+      url: `https://${site.domain}`,
+      email: site.email,
+      description,
+      areaServed: ['US', 'GB', 'AU', 'CN', 'TW', 'HK'],
+      availableLanguage: ['en', 'zh-Hant', 'zh-Hans', 'yue'],
+      sameAs: [site.social.linkedin, site.social.instagram, site.social.facebook].filter(Boolean),
+      founder: {
+        '@type': 'Person',
+        name: 'Linda Chow',
+        jobTitle: 'Speech-Language Pathologist (CCC-SLP) and Board Certified Behavior Analyst (BCBA)',
+        knowsLanguage: ['English', 'Cantonese', 'Mandarin'],
+      },
+    })} />
+  </head>
+
+  <body>
+    <Header lang={lang} switcher={switcher} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+  </body>
+</html>

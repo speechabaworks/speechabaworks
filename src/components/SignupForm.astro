@@ -1,0 +1,110 @@
+---
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  formId: string;
+  title: string;
+  file?: string;
+  gated?: boolean;
+}
+const { lang, formId, title, file, gated = true } = Astro.props;
+const t = useTranslations(lang);
+const id = `signup-${formId}`;
+---
+
+{gated ? (
+  <div class="signup">
+    <h3 class="signup-title">{t('signup.heading')}</h3>
+    <p class="signup-what">{title}</p>
+
+    <form class="signup-form" data-signup action="/api/subscribe" method="post">
+      <input type="hidden" name="list" value={formId} />
+      <input type="hidden" name="lang" value={lang} />
+      {/* honeypot — real people never fill this in */}
+      <div class="hp" aria-hidden="true">
+        <label for={`${id}-company`}>Company</label>
+        <input id={`${id}-company`} type="text" name="company" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <div class="field">
+        <label for={`${id}-name`}>{t('form.name')}</label>
+        <input id={`${id}-name`} type="text" name="name" autocomplete="name" required />
+      </div>
+      <div class="field">
+        <label for={`${id}-email`}>{t('form.email')}</label>
+        <input id={`${id}-email`} type="email" name="email" autocomplete="email" required />
+      </div>
+
+      <button class="btn btn--primary" type="submit">{t('signup.button')}</button>
+      <p class="signup-consent">{t('signup.consent')}</p>
+      <p class="form-status" data-status role="status" aria-live="polite"></p>
+    </form>
+  </div>
+) : (
+  <div class="signup">
+    <h3 class="signup-title">{title}</h3>
+    {file && <p><a class="btn btn--primary" href={file} download>{t('cta.download')}</a></p>}
+  </div>
+)}
+
+<style>
+  .signup {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--brand);
+    border-radius: 3px;
+    padding: 1.4rem 1.35rem 1.5rem;
+    display: flex; flex-direction: column; gap: .75rem;
+    box-shadow: var(--shadow-sm);
+  }
+  .signup-title { font-size: var(--t-1); }
+  .signup-what { font-size: .875rem; color: var(--accent); font-weight: 600; }
+
+  .signup-form { display: flex; flex-direction: column; gap: .85rem; }
+  .signup-consent { font-size: .75rem; line-height: 1.5; color: var(--ink-faint); }
+
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+  .form-status { font-size: .875rem; margin: 0; }
+  .form-status:empty { display: none; }
+  .form-status[data-state='ok'] { color: var(--brand); font-weight: 600; }
+  .form-status[data-state='error'] { color: #A33B2A; font-weight: 600; }
+</style>
+
+<script>
+  document.querySelectorAll('form[data-signup]').forEach((form) => {
+    const f = form as HTMLFormElement;
+    const status = f.querySelector('[data-status]') as HTMLElement | null;
+    const button = f.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+
+    f.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!status || !button) return;
+
+      const original = button.textContent;
+      button.disabled = true;
+      status.removeAttribute('data-state');
+      status.textContent = '…';
+
+      try {
+        const res = await fetch(f.action, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: new FormData(f),
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        const data = await res.json().catch(() => ({}) as Record<string, string>);
+        status.setAttribute('data-state', 'ok');
+        status.textContent = data.message ?? 'Check your inbox — it is on the way.';
+        f.reset();
+      } catch {
+        status.setAttribute('data-state', 'error');
+        status.textContent = 'That did not send. Please email linda@speechabaworks.com instead.';
+      } finally {
+        button.disabled = false;
+        button.textContent = original;
+      }
+    });
+  });
+</script>

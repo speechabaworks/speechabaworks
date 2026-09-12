@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import BlogPost from '../../../components/pages/BlogPost.astro';
+import { allLangs, path } from '../../../i18n/ui';
+import { getCollection, render } from 'astro:content';
+
+const LANG = 'zh-hant';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('posts')).filter(
+    (p) => p.id.startsWith('zh-hant/') && !p.data.draft,
+  );
+  return posts.map((post) => ({
+    params: { slug: post.id.slice('zh-hant/'.length) },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const slug = post.id.slice(LANG.length + 1);
+
+// Only offer a language alternate where that translation actually exists.
+const all = await getCollection('posts');
+const altHrefs = allLangs
+  .filter((l) => all.some((p) => p.id === `${l}/${slug}` && !p.data.draft))
+  .map((l) => ({ lang: l, href: `${path('blog', l)}/${slug}` }));
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  altHrefs={altHrefs}
+  ogType="article"
+>
+  <BlogPost
+    lang={LANG}
+    title={post.data.title}
+    description={post.data.description}
+    pubDate={post.data.pubDate}
+    updatedDate={post.data.updatedDate}
+    tags={post.data.tags}
+    body={post.body ?? ''}
+  >
+    <Content />
+  </BlogPost>
+</BaseLayout>

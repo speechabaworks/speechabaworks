@@ -1,0 +1,106 @@
+---
+import CtaBand from '../CtaBand.astro';
+import Icon from '../Icon.astro';
+import { useTranslations, path, type Lang } from '../../i18n/ui';
+import { formatDate, readingTime } from '../../lib/content';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  tags: string[];
+  body: string;
+}
+const { lang, title, description, pubDate, updatedDate, tags, body } = Astro.props;
+const t = useTranslations(lang);
+const minutes = readingTime(body, lang);
+---
+
+<article class="post-page">
+  <header class="post-head">
+    <div class="shell">
+      <div class="post-head-inner">
+        <p class="post-meta">
+          <time datetime={pubDate.toISOString().slice(0, 10)}>{formatDate(pubDate, lang)}</time>
+          <span aria-hidden="true">·</span>
+          <span>{minutes} {t('blog.readingTime')}</span>
+        </p>
+        <h1>{title}</h1>
+        <p class="lede">{description}</p>
+        {tags.length > 0 && (
+          <ul class="post-tags">
+            {tags.map((tag) => <li><span class="tag">{tag}</span></li>)}
+          </ul>
+        )}
+        {updatedDate && (
+          <p class="post-updated small muted">
+            {t('blog.updated')} <time datetime={updatedDate.toISOString().slice(0, 10)}>{formatDate(updatedDate, lang)}</time>
+          </p>
+        )}
+      </div>
+    </div>
+  </header>
+
+  <div class="shell">
+    <div class="post-content prose">
+      <slot />
+    </div>
+    <p class="post-back">
+      <a class="arrow-link arrow-link--back" href={path('blog', lang)}><Icon name="arrow-left" size={17} />{t('blog.back')}</a>
+    </p>
+  </div>
+</article>
+
+<CtaBand lang={lang} />
+
+<style>
+  .post-head {
+    border-bottom: 1px solid var(--rule);
+    background:
+      radial-gradient(110% 140% at 6% 0%, var(--brand-tint) 0%, transparent 60%),
+      var(--paper);
+  }
+  .post-head-inner {
+    display: flex; flex-direction: column; gap: .8rem;
+    padding-block: clamp(2.5rem, 6vw, 4rem) clamp(2rem, 4vw, 3rem);
+    max-width: 40rem;
+  }
+  .post-head h1 { font-size: var(--t-4); max-width: 22ch; }
+  .post-meta {
+    display: flex; flex-wrap: wrap; gap: .5rem;
+    font-size: .8125rem; letter-spacing: .04em;
+    color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+  }
+  .post-tags { list-style: none; margin: .2rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .45rem; }
+  .post-tags li { max-width: none; }
+  .tag {
+    display: inline-block;
+    font-size: .75rem; font-weight: 600; letter-spacing: .04em;
+    color: var(--brand); background: var(--brand-tint);
+    padding: .22rem .6rem; border-radius: 999px;
+  }
+  .post-updated { margin-top: .3rem; }
+
+  .post-content {
+    max-width: 40rem;
+    padding-block: clamp(2.25rem, 5vw, 3.25rem) 1rem;
+    font-size: 1.09rem;
+  }
+  .post-content :global(h2) { font-size: var(--t-3); margin-top: 1.6rem; }
+  .post-content :global(h3) { font-size: var(--t-2); margin-top: 1.1rem; }
+  .post-content :global(img) { border-radius: 3px; margin-block: .5rem; }
+  .post-content :global(figcaption) { font-size: .8125rem; color: var(--ink-faint); }
+  .post-content :global(pre) {
+    overflow-x: auto; padding: 1rem; border-radius: 3px;
+    background: var(--surface-2); border: 1px solid var(--rule);
+    font-size: .875rem;
+  }
+  .post-content :global(hr) { margin-block: 1.25rem; }
+  .post-content :global(table) { min-width: 0; }
+
+  .post-back { padding-block: 1.5rem 3.5rem; }
+
+</style>

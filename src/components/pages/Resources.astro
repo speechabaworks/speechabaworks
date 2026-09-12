@@ -1,0 +1,132 @@
+---
+import PageHeader from '../PageHeader.astro';
+import Icon from '../Icon.astro';
+import CtaBand from '../CtaBand.astro';
+import SignupForm from '../SignupForm.astro';
+import { path, type Lang, copyFor } from '../../i18n/ui';
+import { byLang, sortByOrder, sortByDateDesc, formatDate } from '../../lib/content';
+import { render } from 'astro:content';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+
+const resources = sortByOrder(await byLang('resources', lang));
+const rendered = await Promise.all(
+  resources.map(async (r) => ({ entry: r, Content: (await render(r)).Content })),
+);
+const posts = sortByDateDesc((await byLang('posts', lang)).filter((p) => !p.data.draft)).slice(0, 3);
+
+const copy = {
+  en: {
+    eyebrow: 'Free resources',
+    title: 'Things you can use this week',
+    lede: 'Written for clinicians who read between sessions, not on a study weekend. Short, specific, and built from cases rather than from a textbook.',
+    latestTitle: 'Latest writing',
+    latestLink: 'All writing',
+    latestEmpty: 'The first pieces are being written. Join the list above and you will be told when they land.',
+  },
+  zh: {
+    eyebrow: '免費資源',
+    title: '這週就用得上的東西',
+    lede: '為在兩堂課之間讀東西的臨床工作者而寫，而不是為週末進修而寫。篇幅短、內容具體，出自真實個案而非教科書。',
+    latestTitle: '最新文章',
+    latestLink: '所有文章',
+    latestEmpty: '文章正在撰寫中。訂閱上方的電子報，新文章上線時會第一時間通知你。',
+  },
+} as const;
+
+const c = copyFor(copy, lang);
+---
+
+<PageHeader eyebrow={c.eyebrow} title={c.title} lede={c.lede} />
+
+<section class="band">
+  <div class="shell shell--wide stack stack-6">
+    {rendered.map(({ entry: r, Content }) => (
+      <article class="resource" id={r.slug}>
+        <div class="resource-copy stack stack-3">
+          <div class="stack stack-2">
+            <h2>{r.data.title}</h2>
+            <p class="resource-for">{r.data.forWhom}</p>
+          </div>
+          <p class="resource-summary">{r.data.summary}</p>
+          <div class="prose resource-body"><Content /></div>
+        </div>
+        <div class="resource-form">
+          <SignupForm lang={lang} formId={r.data.formId ?? r.slug} title={r.data.title} file={r.data.file} gated={r.data.gated} />
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<section class="band band--tint">
+  <div class="shell shell--wide stack stack-5">
+    <div class="latest-head">
+      <h2 class="h-sub">{c.latestTitle}</h2>
+      <a class="arrow-link" href={path('blog', lang)}>{c.latestLink}<Icon name="arrow-right" size={17} /></a>
+    </div>
+
+    {posts.length === 0 ? (
+      <p class="muted">{c.latestEmpty}</p>
+    ) : (
+      <ul class="post-list">
+        {posts.map((p) => (
+          <li>
+            <a class="post-card" href={`${path('blog', lang)}/${p.slug}`}>
+              <time datetime={p.data.pubDate.toISOString().slice(0, 10)}>{formatDate(p.data.pubDate, lang)}</time>
+              <h3>{p.data.title}</h3>
+              <p>{p.data.description}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</section>
+
+<CtaBand lang={lang} />
+
+<style>
+  .resource {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: clamp(1.75rem, 4vw, 3rem);
+    align-items: start;
+    padding-block: 2rem;
+    border-top: 1px solid var(--rule);
+    scroll-margin-top: 6rem;
+  }
+  .resource:last-of-type { border-bottom: 1px solid var(--rule); }
+  @media (max-width: 54rem) { .resource { grid-template-columns: 1fr; } }
+
+  .resource h2 { font-size: var(--t-3); }
+  .resource-for {
+    font-size: .75rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--accent); font-weight: 700;
+  }
+  :global(:lang(zh)) .resource-for { letter-spacing: .05em; text-transform: none; font-size: .8125rem; }
+  .resource-summary { color: var(--ink-soft); }
+  .resource-body :global(p) { color: var(--ink-soft); font-size: .9375rem; }
+
+  .h-sub { font-family: var(--f-sans); font-size: var(--t-3); font-weight: 500; }
+  .latest-head { display: flex; flex-wrap: wrap; gap: .75rem 2rem; align-items: baseline; justify-content: space-between; }
+
+  .post-list {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.25rem;
+  }
+  .post-list li { max-width: none; }
+  .post-card {
+    display: flex; flex-direction: column; gap: .45rem; height: 100%;
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 3px;
+    padding: 1.25rem 1.25rem 1.4rem;
+    text-decoration: none; color: inherit;
+    box-shadow: var(--shadow-sm);
+    transition: border-color .18s ease, transform .18s ease;
+  }
+  .post-card:hover { border-color: var(--brand); transform: translateY(-2px); }
+  .post-card time { font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
+  .post-card h3 { font-size: var(--t-1); }
+  .post-card p { font-size: .9375rem; color: var(--ink-soft); }
+</style>

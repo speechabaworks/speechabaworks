@@ -1,0 +1,90 @@
+---
+import { byLang, sortByOrder } from '../lib/content';
+import { useTranslations, type Lang, isZh } from '../i18n/ui';
+
+interface Props { lang: Lang; limit?: number; featuredOnly?: boolean; heading?: string }
+const { lang, limit, featuredOnly = false, heading } = Astro.props;
+const t = useTranslations(lang);
+
+let items = sortByOrder(await byLang('testimonials', lang));
+if (featuredOnly) items = items.filter((i) => i.data.featured);
+if (limit) items = items.slice(0, limit);
+---
+
+{items.length > 0 && (
+  <section class="band">
+    <div class="shell shell--wide stack stack-5">
+      <div class="section-title">
+        <p class="eyebrow">{isZh(lang) ? '真實回饋' : 'In their words'}</p>
+        <h2>{heading ?? t('testimonials.heading')}</h2>
+      </div>
+
+      <ul class="quote-grid">
+        {items.map((item) => (
+          <li>
+            <figure class="quote">
+              <p class="quote-pull">{item.data.pull}</p>
+              <blockquote class="quote-body"><p>{item.data.quote}</p></blockquote>
+              <figcaption class="quote-by">
+                <span class="quote-name">{item.data.name}</span>
+                <span class="quote-role">{item.data.role}</span>
+              </figcaption>
+            </figure>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
+
+<style>
+  .quote-grid {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18.5rem, 1fr));
+    gap: 1.25rem;
+  }
+  .quote-grid li { max-width: none; }
+
+  .quote {
+    margin: 0;
+    height: 100%;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--accent);
+    border-radius: 3px;
+    padding: 1.4rem 1.35rem 1.45rem;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .quote-pull {
+    font-family: var(--f-sans);
+    font-size: var(--t-1);
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+
+  .quote-body { margin: 0; }
+  .quote-body p {
+    font-size: .9375rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: none;
+  }
+
+  .quote-by {
+    margin-top: auto;
+    padding-top: .8rem;
+    border-top: 1px solid var(--rule-soft);
+    display: flex;
+    flex-direction: column;
+    gap: .05rem;
+  }
+  .quote-name { font-weight: 600; font-size: .9375rem; }
+  .quote-role { font-size: .8125rem; color: var(--ink-faint); }
+</style>
