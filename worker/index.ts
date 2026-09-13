@@ -147,7 +147,9 @@ async function handleContact(request: Request, env: Env): Promise<Response> {
     `,
   });
 
-  return sent ? json({ ok: true, message: m.contactOk }) : json({ ok: false, message: m.failed }, 502);
+  if (sent) return json({ ok: true, message: m.contactOk });
+  const diag = env.RESEND_API_KEY ? `key present, length ${env.RESEND_API_KEY.length}` : 'KEY MISSING';
+  return json({ ok: false, message: `${m.failed} [${diag}]` }, 502); 
 }
 
 /* ───────────────────────────────────────── subscribe */
