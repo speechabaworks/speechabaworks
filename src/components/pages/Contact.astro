@@ -203,7 +203,7 @@ const c = copyFor(copy, lang);
           headers: { Accept: 'application/json' },
           body: new FormData(form),
         });
-        if (!res.ok) throw new Error(String(res.status));
+               if (!res.ok) { const d = await res.json().catch(() => ({}) as Record<string,string>); status.setAttribute('data-state','error'); status.textContent = d.message ?? ('That did not send (error ' + res.status + ').'); return; }
         const data = await res.json().catch(() => ({}) as Record<string, string>);
         status.setAttribute('data-state', 'ok');
         status.textContent = data.message ?? 'Thank you — your message is on its way.';
