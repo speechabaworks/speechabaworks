@@ -72,7 +72,15 @@ async function passesTurnstile(env: Env, token: string | null, ip: string | null
 }
 
 async function sendEmail(env: Env, payload: Record<string, unknown>): Promise<boolean> {
-  if (!env.RESEND_API_KEY) return false;
+  // These log lines are what make a failure diagnosable. The three causes
+  // are indistinguishable from the visitor's side, so say which one it was
+  // in the Worker log. The key itself is never logged — only whether it is
+  // present and what Resend said back.
+  if (!env.RESEND_API_KEY) {
+    console.error('[mail] RESEND_API_KEY is not set on this Worker');
+    return false;
+  }
+
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
@@ -81,7 +89,16 @@ async function sendEmail(env: Env, payload: Record<string, unknown>): Promise<bo
     },
     body: JSON.stringify(payload),
   });
-  return res.ok;
+
+  if (!res.ok) {
+    const detail = await res.text().catch(() => '<no body>');
+    console.error(`[mail] Resend refused: HTTP ${res.status} — ${detail}`);
+    console.error(`[mail] from was: ${String(payload.from)}  to was: ${JSON.stringify(payload.to)}`);
+    return false;
+  }
+
+  console.log('[mail] sent');
+  return true;
 }
 
 /* ───────────────────────────────────────── contact */
