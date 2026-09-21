@@ -217,7 +217,7 @@ const strings = {
     'footer.terms': '服務條款',
     'footer.disclaimer': '服務免責聲明',
     'footer.rights': '版權所有。',
-    'footer.builtNote': '本網站提供諮詢與教練服務，不能取代直接的臨床評估或治療。',
+    'footer.builtNote': '本網站提供諮詢與指導服務，不能取代直接的臨床評估或治療。',
 
     'blog.readingTime': '分鐘閱讀',
     'blog.updated': '更新於',

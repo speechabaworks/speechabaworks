@@ -12,8 +12,11 @@ interface Props {
   updatedDate?: Date;
   tags: string[];
   body: string;
+  /** Optional cover image in /public, shown above the article and used when the post is shared. */
+  hero?: string;
+  heroAlt?: string;
 }
-const { lang, title, description, pubDate, updatedDate, tags, body } = Astro.props;
+const { lang, title, description, pubDate, updatedDate, tags, body, hero, heroAlt } = Astro.props;
 const t = useTranslations(lang);
 const minutes = readingTime(body, lang);
 ---
@@ -42,6 +45,14 @@ const minutes = readingTime(body, lang);
       </div>
     </div>
   </header>
+
+  {hero && (
+    <div class="shell">
+      <figure class="post-hero">
+        <img src={hero} alt={heroAlt ?? ''} loading="eager" />
+      </figure>
+    </div>
+  )}
 
   <div class="shell">
     <div class="post-content prose">
@@ -83,6 +94,16 @@ const minutes = readingTime(body, lang);
     padding: .22rem .6rem; border-radius: 999px;
   }
   .post-updated { margin-top: .3rem; }
+
+  .post-hero {
+    max-width: 40rem;
+    margin: 0;
+    padding-top: clamp(1.5rem, 4vw, 2.5rem);
+  }
+  .post-hero img {
+    width: 100%; height: auto; display: block;
+    border-radius: 3px;
+  }
 
   .post-content {
     max-width: 40rem;

@@ -15,10 +15,12 @@ interface Props {
   /** For blog posts, where the same post lives in each language. */
   altHrefs?: { lang: Lang; href: string }[];
   ogType?: string;
+  /** Path to the sharing image in /public, e.g. /images/blog/post.jpg */
+  image?: string;
   noindex?: boolean;
 }
 
-const { title, description, routeKey, altHrefs, ogType = 'website', noindex = false } = Astro.props;
+const { title, description, routeKey, altHrefs, ogType = 'website', image, noindex = false } = Astro.props;
 
 const lang: Lang = langFromUrl(Astro.url);
 const canonical = new URL(Astro.url.pathname.replace(/\/+$/, '') || '/', Astro.site);
@@ -63,6 +65,8 @@ const fullTitle = title === site.name ? `${site.name} — ${tagline}` : `${title
     <meta property="og:url" content={canonical.href} />
     <meta property="og:locale" content={htmlLang[lang].replace('-', '_')} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:image" content={new URL(image ?? '/images/logo-lockup.png', Astro.site).href} />
+    <meta name="twitter:image" content={new URL(image ?? '/images/logo-lockup.png', Astro.site).href} />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate" type="application/rss+xml" title={site.name} href="/rss.xml" />
