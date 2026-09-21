@@ -16,7 +16,7 @@ interface Props {
 const { size = 42, lockup = false, zh = false, alt = '', class: className = '' } = Astro.props;
 
 const base = zh ? '/images/logo-zh-lockup' : lockup ? '/images/logo-lockup' : '/images/logo-mark';
-const ratio = zh ? 456 / 1332 : lockup ? 448 / 1712 : 448 / 888;
+const ratio = zh ? 456 / 1332 : lockup ? 359 / 1333 : 448 / 888;
 ---
 
 <picture class={`brandmark ${className}`}>

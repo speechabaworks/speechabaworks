@@ -70,8 +70,8 @@ const fullTitle = title === site.name ? `${site.name} — ${tagline}` : `${title
     <meta property="og:url" content={canonical.href} />
     <meta property="og:locale" content={htmlLang[lang].replace('-', '_')} />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta property="og:image" content={new URL(image ?? '/images/logo-lockup.png', Astro.site).href} />
-    <meta name="twitter:image" content={new URL(image ?? '/images/logo-lockup.png', Astro.site).href} />
+    <meta property="og:image" content={new URL(image ?? '/images/og-default.jpg', Astro.site).href} />
+    <meta name="twitter:image" content={new URL(image ?? '/images/og-default.jpg', Astro.site).href} />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate" type="application/rss+xml" title={site.name} href="/rss.xml" />
