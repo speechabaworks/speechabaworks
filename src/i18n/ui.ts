@@ -85,7 +85,7 @@ const SEGMENTS = {
   resources: '/resources',
   blog: '/blog',
   faqs: '/faqs',
-  testimonials: '/testimonials',
+  testimonials: '/reviews',
   contact: '/contact',
   privacy: '/privacy',
   terms: '/terms',

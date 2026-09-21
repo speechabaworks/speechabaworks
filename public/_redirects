@@ -3,6 +3,9 @@
 /meetlinda            /meet-linda                301
 /partnersandtalks     /collaborate               301
 /about-chinese        /zh-hant                   301
+/testimonials          /reviews                   301
+/zh-hant/testimonials  /zh-hant/reviews           301
+/zh-hans/testimonials  /zh-hans/reviews           301
 /faq                  /faqs                      301
 /privacy-policy       /privacy                   301
 /terms-and-conditions /terms                     301
