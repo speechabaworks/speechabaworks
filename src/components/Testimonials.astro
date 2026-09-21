@@ -1,14 +1,20 @@
 ---
+/**
+ * The testimonials band on Home and Services: the featured few as short
+ * excerpts, and a link to the page that holds all of them.
+ */
+import TestimonialCard from './TestimonialCard.astro';
 import { byLang, sortByOrder } from '../lib/content';
-import { useTranslations, type Lang, isZh } from '../i18n/ui';
+import { useTranslations, path, type Lang, isZh } from '../i18n/ui';
 
 interface Props { lang: Lang; limit?: number; featuredOnly?: boolean; heading?: string }
 const { lang, limit, featuredOnly = false, heading } = Astro.props;
 const t = useTranslations(lang);
 
-let items = sortByOrder(await byLang('testimonials', lang));
-if (featuredOnly) items = items.filter((i) => i.data.featured);
+const all = sortByOrder(await byLang('testimonials', lang));
+let items = featuredOnly ? all.filter((i) => i.data.featured) : all;
 if (limit) items = items.slice(0, limit);
+const moreLabel = t('testimonials.readAll').replace('{n}', String(all.length));
 ---
 
 {items.length > 0 && (
@@ -21,18 +27,15 @@ if (limit) items = items.slice(0, limit);
 
       <ul class="quote-grid">
         {items.map((item) => (
-          <li>
-            <figure class="quote">
-              <p class="quote-pull">{item.data.pull}</p>
-              <blockquote class="quote-body"><p>{item.data.quote}</p></blockquote>
-              <figcaption class="quote-by">
-                <span class="quote-name">{item.data.name}</span>
-                <span class="quote-role">{item.data.role}</span>
-              </figcaption>
-            </figure>
-          </li>
+          <li><TestimonialCard item={item} lang={lang} mode="compact" /></li>
         ))}
       </ul>
+
+      {all.length > items.length && (
+        <p class="quote-more">
+          <a class="link-arrow" href={path('testimonials', lang)}>{moreLabel} <span aria-hidden="true">→</span></a>
+        </p>
+      )}
     </div>
   </section>
 )}
@@ -46,45 +49,13 @@ if (limit) items = items.slice(0, limit);
   }
   .quote-grid li { max-width: none; }
 
-  .quote {
-    margin: 0;
-    height: 100%;
-    background: var(--surface);
-    border: 1px solid var(--rule);
-    border-top: 3px solid var(--accent);
-    border-radius: 3px;
-    padding: 1.4rem 1.35rem 1.45rem;
-    display: flex;
-    flex-direction: column;
-    gap: .75rem;
-    box-shadow: var(--shadow-sm);
-  }
-
-  .quote-pull {
-    font-family: var(--f-sans);
-    font-size: var(--t-1);
+  .quote-more { margin: 0; }
+  .quote-more a {
     font-weight: 600;
-    line-height: 1.3;
-    color: var(--ink);
-    text-wrap: balance;
+    color: var(--brand);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--brand) 35%, transparent);
+    padding-bottom: .1rem;
   }
-
-  .quote-body { margin: 0; }
-  .quote-body p {
-    font-size: .9375rem;
-    line-height: 1.6;
-    color: var(--ink-soft);
-    max-width: none;
-  }
-
-  .quote-by {
-    margin-top: auto;
-    padding-top: .8rem;
-    border-top: 1px solid var(--rule-soft);
-    display: flex;
-    flex-direction: column;
-    gap: .05rem;
-  }
-  .quote-name { font-weight: 600; font-size: .9375rem; }
-  .quote-role { font-size: .8125rem; color: var(--ink-faint); }
+  .quote-more a:hover { border-bottom-color: var(--brand); }
 </style>

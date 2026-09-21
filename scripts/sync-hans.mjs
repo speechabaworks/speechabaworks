@@ -26,7 +26,13 @@ const exists = async (p) => !!(await stat(p).catch(() => null));
 let written = 0;
 let skipped = 0;
 
+/* Testimonials are quotations. Most were written in Simplified Chinese, and
+   regenerating them from the Traditional would rewrite people's own words
+   through a converter. Each language file is maintained by hand instead. */
+const SKIP = new Set(['testimonials']);
+
 for (const collection of await readdir(ROOT)) {
+  if (SKIP.has(collection)) continue;
   const from = join(ROOT, collection, 'zh-hant');
   const to = join(ROOT, collection, 'zh-hans');
   if (!(await exists(from))) continue;

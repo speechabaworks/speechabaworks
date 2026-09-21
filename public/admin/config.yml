@@ -91,11 +91,19 @@ collections:
     summary: '{{name}}  —  {{pull}}'
     sortable_fields: [order, name]
     fields:
-      - { name: name, label: Name, widget: string, i18n: true }
-      - { name: role, label: Role / organization, widget: string, i18n: true }
-      - { name: pull, label: Headline quote, widget: string, i18n: true,
-          hint: 'The short line shown in bold. One sentence at most.' }
-      - { name: quote, label: Full quote, widget: text, i18n: true }
+      - { name: title, label: Headline (optional), widget: string, required: false, i18n: true,
+          hint: 'A short headline in your own words, shown above the quote.' }
+      - { name: name, label: Name, widget: string, required: false, i18n: true,
+          hint: 'Leave blank for someone identified by role only.' }
+      - { name: role, label: Role, widget: string, i18n: true }
+      - { name: org, label: Organization and city, widget: string, required: false, i18n: true }
+      - { name: pull, label: Short excerpt, widget: text, i18n: true,
+          hint: 'One or two sentences copied word for word from the full testimony. Shown on the cards.' }
+      - { name: quote, label: Full testimony, widget: text, i18n: true,
+          hint: 'The complete text. Leave a blank line between paragraphs. If this is a translation, fill in the two fields below.' }
+      - { name: original, label: Original text (translations only), widget: text, required: false, i18n: true }
+      - { name: originalLang, label: Original language (translations only), widget: select, required: false, i18n: true,
+          options: [en, zh-Hans, zh-Hant] }
       - { name: order, label: Sort order, widget: number, default: 50, value_type: int, i18n: duplicate }
       - { name: featured, label: Show on the home page, widget: boolean, default: false, i18n: duplicate }
 

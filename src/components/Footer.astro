@@ -23,6 +23,7 @@ const year = new Date().getFullYear();
           {navOrder.map((key) => (
             <li><a href={path(key, lang)}>{t(`nav.${key}` as any)}</a></li>
           ))}
+          <li><a href={path('testimonials', lang)}>{t('nav.testimonials')}</a></li>
           <li><a href={path('contact', lang)}>{t('nav.contact')}</a></li>
         </ul>
       </nav>

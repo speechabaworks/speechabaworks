@@ -1,0 +1,52 @@
+---
+import PageHeader from '../PageHeader.astro';
+import CtaBand from '../CtaBand.astro';
+import TestimonialCard from '../TestimonialCard.astro';
+import { type Lang, copyFor } from '../../i18n/ui';
+import { byLang, sortByOrder } from '../../lib/content';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+
+const items = sortByOrder(await byLang('testimonials', lang));
+
+const copy = {
+  en: {
+    eyebrow: 'Testimonials',
+    title: 'What colleagues and families say',
+    lede: 'Supervisors, clinicians, educators and a parent I have worked with, in their own words. Testimonies written in Chinese appear here in English translation, with the original one click away.',
+  },
+  zh: {
+    eyebrow: '真實回饋',
+    title: '同業與家長的回饋',
+    lede: '與我合作過的督導、臨床人員、教師與家長親筆寫下的回饋。以英文撰寫的回饋附有中文翻譯，並可查看原文。',
+  },
+} as const;
+const c = copyFor(copy, lang);
+---
+
+<PageHeader eyebrow={c.eyebrow} title={c.title} lede={c.lede} />
+
+<section class="band band--tint">
+  <div class="shell shell--wide">
+    <ul class="tgrid">
+      {items.map((item) => (
+        <li><TestimonialCard item={item} lang={lang} mode="full" /></li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<CtaBand lang={lang} />
+
+<style>
+  .tgrid {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 24rem), 1fr));
+    gap: 1.25rem;
+    /* `start`, so opening one card does not stretch its neighbour. */
+    align-items: start;
+  }
+  .tgrid li { max-width: none; }
+</style>
