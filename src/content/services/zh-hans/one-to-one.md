@@ -2,7 +2,7 @@
 title: 一对一咨询
 order: 20
 summary: 为临床工作者、教育人员或家长提供持续的个案咨询，处理复杂的沟通与行为问题。你带着真实的个案来，我们一起处理。
-who: 语言治疗师、BCBA、教师与家长
+who: 言语治疗师、BCBA、教师与家长
 format: 视讯通话（Google Meet 或 Zoom）
 duration: 60 分钟
 rate: 每小时 150 美元

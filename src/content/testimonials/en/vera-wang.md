@@ -2,7 +2,7 @@
 order: 60
 featured: false
 name: Vera Wang
-role: BCBA & pediatric speech therapist
+role: BCBA & pediatric speech therapist, Guangzhou
 pull: You always pinpoint the key skills a child most needs to build, and set a clear intervention direction for my most challenging cases.
 quote: |-
   As a senior supervisor with a dual background in SLP and BCBA, you always pinpoint the key skills a child most needs to build, and set a clear intervention direction for my most challenging cases with ease and efficiency. Even more valuable, you not only share your hands-on clinical techniques without reservation, but also taught me to analyze problems and make decisions with critical, rational clinical reasoning. This guidance has helped me see clearly and move steadily along my professional path, so that I can better help the people who need it.

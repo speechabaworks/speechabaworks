@@ -5,7 +5,8 @@
  */
 type Name =
   | 'arrow-right' | 'arrow-left' | 'check' | 'exchange'
-  | 'menu' | 'mail' | 'calendar' | 'download' | 'plus' | 'globe';
+  | 'menu' | 'mail' | 'calendar' | 'download' | 'plus' | 'globe'
+  | 'instagram' | 'threads' | 'linkedin' | 'facebook' | 'rednote';
 
 interface Props { name: Name; size?: number; class?: string; label?: string }
 const { name, size = 20, class: className = '', label } = Astro.props;
@@ -21,6 +22,14 @@ const PATHS: Record<Name, string> = {
   'download':    '<path d="M12 3v12M7 11l5 5 5-5M4 20h16"/>',
   'plus':        '<path d="M12 5v14M5 12h14"/>',
   'globe':       '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 2.6 15 0 18M12 3c-2.6 2.6-2.6 15 0 18"/>',
+
+  /* Social glyphs, drawn in the same stroke style as the rest of the set
+     rather than as the platforms' exact brand marks. */
+  'instagram':   '<rect x="3.25" y="3.25" width="17.5" height="17.5" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="16.9" cy="7.1" r="1" fill="currentColor" stroke="none"/>',
+  'threads':     '<path d="M15.6 8.6v5.2c0 1.4 1 2.2 2.2 2.2 1.6 0 2.7-1.7 2.7-4.1 0-4.6-3.3-7.4-8-7.4-4.8 0-8.2 3.5-8.2 8.4s3.4 8.4 8.3 8.4c1.6 0 3-.3 4.2-.9"/><circle cx="12" cy="12" r="3.4"/>',
+  'linkedin':    '<rect x="3.25" y="3.25" width="17.5" height="17.5" rx="4"/><path d="M8 10.8v6.2"/><circle cx="8" cy="7.6" r="1.05" fill="currentColor" stroke="none"/><path d="M12 17v-6.2M12 13.4c0-1.5 1-2.6 2.5-2.6s2.5 1.1 2.5 2.6V17"/>',
+  'facebook':    '<rect x="3.25" y="3.25" width="17.5" height="17.5" rx="4"/><path d="M15.2 8.2h-1.4c-1.1 0-1.8.7-1.8 1.9V17M10 12.4h4.3"/>',
+  'rednote':     '<path d="M12 7.4C10.6 6.2 8.9 5.6 6.6 5.6H4v12h2.6c2.3 0 4 .6 5.4 1.8 1.4-1.2 3.1-1.8 5.4-1.8H20v-12h-2.6c-2.3 0-4 .6-5.4 1.8z"/><path d="M12 7.4v12"/>',
 };
 ---
 

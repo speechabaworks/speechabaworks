@@ -1,10 +1,20 @@
 ---
 import { useTranslations, path, navOrder, site, type Lang, isZh } from '../i18n/ui';
+import Icon from './Icon.astro';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const year = new Date().getFullYear();
+
+/* Rendered in this order; any handle left blank in site.social is skipped. */
+const socials = ([
+  ['instagram', 'Instagram'],
+  ['threads', 'Threads'],
+  ['linkedin', 'LinkedIn'],
+  ['facebook', 'Facebook'],
+  ['rednote', isZh(lang) ? '小紅書' : 'RedNote'],
+] as const).filter(([key]) => site.social[key]);
 ---
 
 <footer class="site-footer">
@@ -14,6 +24,23 @@ const year = new Date().getFullYear();
         <p class="footer-name">Speech &amp; ABA Works</p>
         <p class="footer-tagline">{t('footer.tagline')}</p>
         <p class="footer-langs" lang="en">English · 廣東話 · 國語</p>
+        {socials.length > 0 && (
+          <ul class="footer-social" aria-label={t('footer.connect')}>
+            {socials.map(([key, label]) => (
+              <li>
+                <a
+                  href={site.social[key]}
+                  rel="me noopener"
+                  target="_blank"
+                  aria-label={label}
+                  title={label}
+                >
+                  <Icon name={key} size={20} label={label} />
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       <nav class="footer-col" aria-label={t('footer.explore')}>
@@ -32,11 +59,9 @@ const year = new Date().getFullYear();
         <h2 class="footer-head">{t('footer.connect')}</h2>
         <ul>
           <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
-          {([['linkedin', 'LinkedIn'], ['instagram', 'Instagram'], ['facebook', 'Facebook']] as const)
-            .filter(([k]) => site.social[k])
-            .map(([k, label]) => (
-              <li><a href={site.social[k]} rel="me noopener">{label}</a></li>
-            ))}
+          {socials.map(([key, label]) => (
+            <li><a href={site.social[key]} rel="me noopener" target="_blank">{label}</a></li>
+          ))}
           <li><a href="/rss.xml">RSS</a></li>
         </ul>
       </div>
@@ -84,6 +109,33 @@ const year = new Date().getFullYear();
   }
   .footer-tagline { font-size: .9375rem; color: var(--ink-soft); max-width: 34ch; }
   .footer-langs { font-size: .8125rem; color: var(--ink-faint); letter-spacing: .05em; }
+
+  .footer-social {
+    list-style: none;
+    margin: .35rem 0 0;
+    padding: 0;
+    display: flex;
+    gap: .5rem;
+  }
+  .footer-social li { max-width: none; }
+  .footer-social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid var(--rule);
+    border-radius: 50%;
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: color .15s ease, border-color .15s ease, background-color .15s ease;
+  }
+  .footer-social a:hover,
+  .footer-social a:focus-visible {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: var(--brand-tint);
+  }
 
   .footer-col { display: flex; flex-direction: column; gap: .7rem; }
   .footer-head {

@@ -129,7 +129,7 @@ No. Verbal behavior comes from behavior analysis and focuses on why language is 
 
 ### What are the VB-MAPP and the ABLLS-R?
 
-Both are assessments many ABA teams use to measure early language and learning skills by function, and to choose teaching goals. The VB-MAPP (Verbal Behavior Milestones Assessment and Placement Program) is organised around developmental milestones; the ABLLS-R (Assessment of Basic Language and Learning Skills – Revised) covers a broad curriculum of language, academic, self-help and motor skills. Many teams use one, and some use both.
+Both are assessments many ABA teams use to measure early language and learning skills by function, and to choose teaching goals. The VB-MAPP (Verbal Behavior Milestones Assessment and Placement Program) is organized around developmental milestones; the ABLLS-R (Assessment of Basic Language and Learning Skills – Revised) covers a broad curriculum of language, academic, self-help and motor skills. Many teams use one, and some use both.
 
 ### Does verbal behavior work for children who use AAC?
 

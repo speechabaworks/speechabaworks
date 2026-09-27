@@ -1,10 +1,20 @@
 ---
 import PageHeader from '../PageHeader.astro';
-import { useTranslations, site, type Lang, copyFor } from '../../i18n/ui';
+import Icon from '../Icon.astro';
+import { useTranslations, site, type Lang, copyFor, isZh } from '../../i18n/ui';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
+
+/* Same order as the footer; any handle left blank in site.social is skipped. */
+const socials = ([
+  ['instagram', 'Instagram', '@speechabaworks'],
+  ['threads', 'Threads', '@speechabaworks'],
+  ['linkedin', 'LinkedIn', 'lindacpy'],
+  ['facebook', 'Facebook', '@speechabaworks'],
+  ['rednote', isZh(lang) ? '小紅書' : 'RedNote', 'SpeechABAworks'],
+] as const).filter(([key]) => site.social[key]);
 
 const copy = {
   en: {
@@ -19,6 +29,10 @@ const copy = {
     writeTitle: 'Or write to me',
     writeBody: 'Describe what you are working on. I read every message myself and reply within two business days.',
     directTitle: 'Direct',
+    socialTitle: 'Find me on social',
+    socialBody: 'I post shorter pieces on collaboration, communication and behavior. The articles here usually start there first.',
+    qrTitle: 'RedNote 小紅書',
+    qrBody: 'Scan the code in the app to find me. My RedNote ID is SpeechABAworks.',
     hoursTitle: 'Working across time zones',
     hoursBody: 'I am based in New York and regularly meet clients in Taiwan, Hong Kong, mainland China, the United Kingdom and Australia. Please propose the times that suit you.',
   },
@@ -34,6 +48,10 @@ const copy = {
     writeTitle: '或者寫訊息給我',
     writeBody: '告訴我你正在處理的事。所有訊息我都親自閱讀，並在兩個工作天內回覆。',
     directTitle: '直接聯絡',
+    socialTitle: '在社群上找到我',
+    socialBody: '我會在社群上分享較短的觀點，主題圍繞跨專業協作、溝通與行為。這裡的文章，許多都是從那裡開始的。',
+    qrTitle: '小紅書',
+    qrBody: '在小紅書 App 掃描下方二維碼即可找到我。我的小紅書號是 SpeechABAworks。',
     hoursTitle: '跨時區工作',
     hoursBody: '我在紐約，經常與台灣、香港、中國大陸、英國與澳洲的客戶會談。請提出你方便的時間。',
   },
@@ -65,13 +83,36 @@ const c = copyFor(copy, lang);
         <h3 class="h-mini">{c.directTitle}</h3>
         <ul class="direct-list">
           <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
-          {([['linkedin', 'LinkedIn'], ['instagram', 'Instagram']] as const)
-            .filter(([k]) => site.social[k])
-            .map(([k, label]) => (
-              <li><a href={site.social[k]} rel="me noopener">{label}</a></li>
-            ))}
         </ul>
       </div>
+
+      {socials.length > 0 && (
+        <div class="social-block stack stack-2">
+          <h3 class="h-mini">{c.socialTitle}</h3>
+          <p class="small muted">{c.socialBody}</p>
+          <ul class="social-list">
+            {socials.map(([key, label, handle]) => (
+              <li>
+                <a href={site.social[key]} rel="me noopener" target="_blank">
+                  <span class="social-chip"><Icon name={key} size={20} label={label} /></span>
+                  <span class="social-text">
+                    <span class="social-name">{label}</span>
+                    <span class="social-handle">{handle}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <div class="qr">
+            <img src="/images/rednote-qr.png" alt={c.qrTitle} width="160" height="160" loading="lazy" />
+            <div class="qr-text">
+              <p class="h-mini">{c.qrTitle}</p>
+              <p class="small muted">{c.qrBody}</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div class="stack stack-2">
         <h3 class="h-mini">{c.hoursTitle}</h3>
@@ -159,6 +200,62 @@ const c = copyFor(copy, lang);
   .direct-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .35rem; }
   .direct-list li { max-width: none; }
   .direct-list a { font-size: .9375rem; }
+
+  .social-block { padding-top: 1.25rem; border-top: 1px solid var(--rule); }
+  .social-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .5rem; }
+  .social-list li { max-width: none; }
+  .social-list a {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .social-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    flex: 0 0 auto;
+    border: 1px solid var(--rule);
+    border-radius: 50%;
+    color: var(--ink-soft);
+    transition: color .15s ease, border-color .15s ease, background-color .15s ease;
+  }
+  .social-list a:hover .social-chip,
+  .social-list a:focus-visible .social-chip {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: var(--brand-tint);
+  }
+  .social-text { display: flex; flex-direction: column; line-height: 1.25; }
+  .social-name { font-size: .9375rem; }
+  .social-list a:hover .social-name { color: var(--accent); text-decoration: underline; }
+  .social-handle { font-size: .8125rem; color: var(--ink-faint); }
+
+  .qr {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-top: .35rem;
+    padding: 1rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius, 8px);
+    background: var(--paper);
+  }
+  .qr img {
+    width: 8rem;
+    height: 8rem;
+    flex: 0 0 auto;
+    border-radius: 4px;
+    background: #fff;
+  }
+  .qr-text { display: flex; flex-direction: column; gap: .3rem; }
+  .qr-text p { max-width: none; }
+  @media (max-width: 30rem) {
+    .qr { flex-direction: column; align-items: flex-start; }
+  }
 
   .panel--form {
     background: var(--surface);

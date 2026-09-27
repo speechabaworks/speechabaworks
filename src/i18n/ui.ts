@@ -61,10 +61,12 @@ export const site = {
      everywhere it appears — footer, contact page, and the search-engine
      profile data — so an empty entry is safe, a wrong one is not. */
   social: {
-    instagram: '',
-    facebook: '',
-    linkedin: '',
-  } as Record<'instagram' | 'facebook' | 'linkedin', string>,
+    instagram: 'https://www.instagram.com/speechabaworks/',
+    threads: 'https://www.threads.com/@speechabaworks',
+    linkedin: 'https://www.linkedin.com/in/lindacpy',
+    facebook: 'https://www.facebook.com/speechabaworks',
+    rednote: 'https://xhslink.cn/m/9GwZDMmWqUS',
+  } as Record<'instagram' | 'threads' | 'linkedin' | 'facebook' | 'rednote', string>,
   stats: [
     { value: '20+', key: 'stat.years' },
     { value: '1,000+', key: 'stat.children' },
@@ -216,7 +218,7 @@ const strings = {
     'stat.sites': '所學校與機構合作',
     'stat.coached': '位教育與臨床專業人員受訓',
 
-    'footer.tagline': '為 0 至 10 歲神經多樣性兒童提供中英雙語的語言治療與應用行為分析整合諮詢。',
+    'footer.tagline': '為 0 至 10 歲神經多樣性兒童提供中英雙語的言語治療與應用行為分析整合諮詢。',
     'footer.explore': '網站導覽',
     'footer.connect': '聯絡方式',
     'footer.legal': '法律聲明',
@@ -236,7 +238,7 @@ const strings = {
     'form.email': '電子郵件',
     'form.role': '你的身分是',
     'form.role.parent': '家長或家庭成員',
-    'form.role.slp': '語言治療師',
+    'form.role.slp': '言語治療師',
     'form.role.bcba': 'BCBA 或行為分析師',
     'form.role.educator': '教師或行政人員',
     'form.role.other': '其他',

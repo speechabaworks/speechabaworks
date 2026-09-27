@@ -5,86 +5,269 @@ import { site, type Lang, copyFor, isZh } from '../../i18n/ui';
 interface Props { lang: Lang; doc: 'privacy' | 'terms' | 'disclaimer' }
 const { lang, doc } = Astro.props;
 
-const updated = { en: 'Last updated 2 September 2026', zh: '最後更新：2026 年 9 月 2 日' } as const;
+const effective = {
+  en: 'Effective date: March 15, 2026',
+  zh: '生效日期：2026 年 3 月 15 日',
+} as const;
+
+type Section = { h: string; p?: string; items?: readonly string[]; after?: string };
 
 const copy = {
   en: {
     privacy: {
-      title: 'Privacy policy',
-      lede: 'What this site collects, why, and what happens to it. Short, because there is not much.',
+      title: 'Privacy Policy',
+      intro: 'Speech & ABA Works LLC ("us", "we", or "our") operates the speechabaworks.com website (the "service"). Speech & ABA Works LLC is an online education, mentorship, and consultation platform. We provide training, resources, and professional development for speech-language pathologists, behavior analysts, special educators, and families.',
       sections: [
-        ['What this site collects', 'Nothing automatically that identifies you. This site uses privacy-preserving analytics that count page views without cookies and without building a profile of you — which is why there is no cookie banner.'],
-        ['What you give me deliberately', 'If you send an inquiry, I receive your name, email address, the role you selected and your message. If you request a free guide, I receive your name and email address and add you to a mailing list.'],
-        ['What I do with it', 'Reply to you, and — if you signed up for a guide — send you that guide and occasional writing. I do not sell, rent, or share your details with anyone, and I do not use them to advertise to you elsewhere.'],
-        ['How long I keep it', 'Inquiries stay in my email for as long as the professional relationship or its record-keeping obligations require. Mailing list entries stay until you unsubscribe, which you can do from the bottom of any email.'],
-        ['Your rights', `Ask me what I hold about you, ask me to correct it, or ask me to delete it, by writing to ${site.email}. I will action it.`],
-        ['Third parties', 'The form delivery, the email platform, and the analytics are run by third-party providers, each of which processes only the data described above. Nothing else on this site loads third-party trackers.'],
-      ],
+        {
+          h: 'What Information We Collect',
+          p: 'We may collect the following types of personal information:',
+          items: [
+            'Contact information: name, email address, and any details you provide when submitting a contact or inquiry form',
+            'Payment information: billing name, address, and payment details processed securely through a third-party payment processor (e.g., PayPal). We do not store your full credit card information.',
+            'Usage data: IP address, browser type, pages visited, and time spent on our site, collected through cookies and analytics tools (e.g., Google Analytics)',
+            'Communications: emails, messages, or any content you send us directly',
+            'Course and program data: enrollment records, progress, and completion information for purchased courses or programs',
+          ],
+        },
+        {
+          h: 'How We Use Your Information',
+          p: 'We use your information to:',
+          items: [
+            'Deliver the services, courses, or consultation you have purchased or requested',
+            'Communicate with you about your enrollment, account, or inquiries',
+            'Send promotional emails or newsletters (only with your consent; you may unsubscribe at any time)',
+            'Improve our website, content, and services',
+            'Comply with legal obligations',
+          ],
+        },
+        {
+          h: 'How We Share Your Information',
+          p: 'We do not sell your personal information. We may share information with:',
+          items: [
+            'Third-party service providers who support our business operations (e.g., payment processors, email platforms, course hosting platforms), bound by confidentiality obligations',
+            'Legal authorities if required by law or to protect our rights',
+          ],
+        },
+        { h: 'Cookies', p: 'Our website uses cookies to improve your browsing experience and to collect analytics data. You may disable cookies through your browser settings; however, some features of our website may not function properly if you do so.' },
+        { h: 'Data Retention', p: 'We retain your personal information for as long as is necessary to fulfill the purposes described in this policy, or as required by applicable law.' },
+        { h: 'Your Rights', p: `Depending on your location, you may have rights to access, correct, delete, or restrict the use of your personal data. To exercise these rights, contact us at ${site.email}. We will respond within 30 days.` },
+        { h: "Children's Privacy", p: 'Our services are intended for adults (18+) and for professionals. We do not knowingly collect personal information from individuals under the age of 18.' },
+        { h: 'International Users', p: 'Speech & ABA Works LLC serves clients across North America, Europe, Asia, Australia, and other regions. By using our website and services, you consent to the processing of your data in accordance with this policy. If you are located in a jurisdiction with specific data protection laws (e.g., GDPR, PIPEDA, PDPO), please contact us to discuss how your data is handled.' },
+        { h: 'Changes to This Policy', p: 'We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated effective date. Continued use of our website constitutes acceptance of the updated policy.' },
+        {
+          h: 'Accessibility Standards & Alternative Access',
+          p: 'We aim to conform to the Web Content Accessibility Guidelines (WCAG) 2.1 at Level AA, published by the World Wide Web Consortium (W3C). These guidelines explain how to make web content more accessible to people with disabilities. If you encounter any content on speechabaworks.com that is not accessible to you, or if you need materials in an alternative format, please contact us. We are happy to provide:',
+          items: [
+            'Text-based versions of visual content or course materials',
+            'Accessible alternatives to PDFs or downloadable documents',
+            'Accommodations to support your participation in any service or program',
+          ],
+        },
+        { h: 'Contact Us', p: `If you have questions about this Privacy Policy, please contact: ${site.email} | ${site.domain}` },
+      ] as readonly Section[],
     },
+
     terms: {
-      title: 'Terms & conditions',
-      lede: 'The terms that apply to consultation, coaching and training services booked through this site.',
+      title: 'Terms and Conditions',
+      intro: '',
       sections: [
-        ['Services', 'Consultation, coaching, professional development and training, delivered remotely unless otherwise agreed in writing. Services are provided to professionals, organizations and families.'],
-        ['Booking and payment', 'Payment is due at the time of booking. Rates are as published on the services page, or as agreed in writing for group and organizational work. No insurance is accepted.'],
-        ['Cancellation', 'You may reschedule or cancel without charge up to 24 hours before a scheduled session. Cancellations inside 24 hours may be charged in full.'],
-        ['Scope of the relationship', 'Consultation and coaching do not create a clinician–patient relationship, and do not constitute diagnosis, assessment or treatment of any individual child. See the service disclaimer.'],
-        ['Confidentiality', 'Case material you share is treated confidentially. Please de-identify client information before sharing it. Where a legal obligation to report arises, it takes precedence.'],
-        ['Intellectual property', 'Materials, handouts and frameworks provided remain the intellectual property of Speech & ABA Works and are licensed to you for your own professional use. They may not be resold or redistributed as training material without written permission.'],
-        ['Changes', 'These terms may be updated. The version in force is the one published here at the time of your booking.'],
-      ],
+        { h: 'Agreement to Terms', p: 'By accessing or using speechabaworks.com (the "service"), purchasing any course, program, or service, or otherwise engaging with Speech & ABA Works LLC ("us", "we", or "our"), you agree to be bound by these Terms and Conditions. If you do not agree, please do not use our website or services.' },
+        { h: 'Description of Services', p: 'Speech & ABA Works LLC offers online educational courses, professional development training, mentorship programs, and consultation services for speech-language pathologists, behavior analysts, special educators, and families. All content is provided for informational and educational purposes only.' },
+        { h: 'Not Professional or Clinical Services', p: 'Nothing on this website or within any Speech & ABA Works LLC program constitutes speech-language treatment, applied behavior analysis therapy, psychological services, medical advice, or any other licensed professional service. Use of Speech & ABA Works LLC content does not create a client-clinician relationship unless a separate, written agreement explicitly states otherwise.' },
+        {
+          h: 'Purchases and Payment',
+          items: [
+            'All prices are listed in U.S. dollars (USD) unless otherwise noted.',
+            'Payment is due at the time of purchase. We accept major credit cards and PayPal through secure third-party processors.',
+            'You are responsible for any applicable taxes based on your location.',
+          ],
+        },
+        { h: 'Refund Policy', p: `Due to the digital nature of our products, all sales are generally final. Refunds may be considered on a case-by-case basis within 7 days of purchase, provided the course or content has not been substantially accessed. To request a refund, contact ${site.email}. We reserve the right to decline refund requests at our discretion.` },
+        { h: 'Intellectual Property', p: 'All content on this website, including course materials, handouts, graphics, videos, written guides, and branding, is the intellectual property of Speech & ABA Works LLC and Linda Chow. You may not reproduce, distribute, resell, or share our content without written permission. Personal, non-commercial use for your own professional learning is permitted.' },
+        {
+          h: 'User Conduct',
+          p: 'You agree not to:',
+          items: [
+            'Share course login credentials or content with others',
+            'Use our content for commercial resale or in training programs without a licensing agreement',
+            'Misrepresent our content, brand, or the scope of services provided',
+            'Engage in abusive, harassing, or disrespectful conduct toward our team or community',
+          ],
+        },
+        { h: 'Disclaimer of Warranties', p: 'Speech & ABA Works LLC provides all content and services on an "as-is" basis without warranties of any kind, express or implied. We do not guarantee specific professional, clinical, or organizational outcomes from participation in our programs.' },
+        {
+          h: 'Limitation of Liability',
+          items: [
+            'Nothing on this website constitutes or is meant to constitute, legal, financial or medical advice of any kind. If you require advice you should consult an appropriate professional.',
+            'The following provisions of this section will apply to the maximum extent permitted by applicable law and will not limit or exclude our liability in respect of any matter which it would be unlawful or illegal for us to limit or to exclude our liability. In no event will we be liable for any direct or indirect damages (including any damages for loss of profits, loss of revenue, loss or corruption of data, software or database, or loss of or harm to property or data) incurred by you or any third party, arising from your access to, or use of, our website.',
+            'Except to the extent any additional contract expressly states otherwise, our maximum liability to you for all damages arising out of or related to the website or any products and services marketed or sold through the website, regardless of the form of legal action that imposes liability (whether in contract, equity, negligence, intended conduct, tort or otherwise) will be limited to the total cost that you paid to us to purchase such products or services or use the website. Such limit will apply in the aggregate to all of your claims, actions and causes of action of every kind and nature.',
+          ],
+        },
+        { h: 'Governing Law', p: 'These Terms shall be governed by the laws of the applicable jurisdiction in which Speech & ABA Works LLC is registered. Any disputes shall be resolved through good-faith negotiation and, if necessary, through binding arbitration or the courts of the applicable jurisdiction.' },
+        { h: 'Changes to These Terms', p: 'We reserve the right to update these Terms at any time. Updated Terms will be posted on this page. Continued use of our services after updates constitutes acceptance.' },
+        { h: 'Contact Us', p: `If you have questions about these Terms and Conditions, please contact: ${site.email} | ${site.domain}` },
+      ] as readonly Section[],
     },
+
     disclaimer: {
-      title: 'Service disclaimer',
-      lede: 'What these services are, and — importantly — what they are not.',
+      title: 'Service Disclaimer',
+      intro: 'By using our website (speechabaworks.com), you hereby consent to our disclaimer and agree to its terms.',
       sections: [
-        ['Consultation, not treatment', 'Services offered through this site are professional consultation, coaching and training. They are not direct speech-language therapy, not applied behavior analysis services delivered to a client, and not a substitute for either.'],
-        ['No diagnosis or assessment', 'Nothing provided here constitutes a diagnostic evaluation, a formal assessment, or a clinical recommendation for a specific child. Decisions about an individual child remain with that child\'s own treating clinicians and family.'],
-        ['No clinician–patient relationship', 'Engaging these services does not establish a clinician–patient or therapist–client relationship, and does not create ongoing clinical responsibility for any individual.'],
-        ['Professional judgment remains yours', 'If you are a practitioner, you remain responsible for your own clinical decisions, for the scope of your license, and for compliance with your regulatory body and employer.'],
-        ['Content on this site', 'Articles, guides and resources are general educational material. They are not tailored to any individual and should not be applied without professional judgment about the child in front of you.'],
-        ['Urgent concerns', 'If you have an urgent concern about a child\'s safety, health or wellbeing, contact your local emergency or child protection services rather than waiting on a consultation.'],
-      ],
+        {
+          h: 'Scope of Practice',
+          items: [
+            'Online courses and training in speech-language pathology and applied behavior analysis frameworks, designed for professionals and families',
+            'Professional mentorship and consultation for SLPs, BCBAs, and special educators seeking to develop their skills in interprofessional practice',
+            'Parent Coaching and consultation for families seeking for information, strategies, and skills to support individuals in their care. This is not a substitute for individualized evaluation or treatment by a licensed professional. We encourage all families to work with qualified, licensed practitioners in their community',
+            'Educational resources, guides, and content related to communication, AAC, behavior, and culturally responsive practice',
+            'CEU / PDU-eligible professional development programs, where indicated',
+          ],
+        },
+        {
+          h: 'Speech & ABA Works is NOT a clinical service provider',
+          p: 'Specifically:',
+          items: [
+            'We do not provide speech-language pathology evaluation, diagnosis, or treatment',
+            'We do not provide applied behavior analysis assessment or therapy',
+            'We do not provide psychological services or mental health support',
+            'We do not provide medical advice of any kind',
+            'Purchasing or participating in a course or training program does NOT establish a therapeutic or supervisory relationship',
+          ],
+        },
+        { h: 'About the Consultant', p: 'The consultant holds active licenses as a Speech-Language Pathologist (CCC-SLP, ASHA) and Board Certified Behavior Analyst (BCBA, BACB). These credentials inform the quality and clinical grounding of Speech & ABA Works content. The consultation or mentorship you receive is provided within the consultant’s professional scope and competence in Speech-Language Pathology and Applied Behavior Analysis. However, when operating through Speech & ABA Works in a consultation or mentorship capacity, the consultant is not acting as your SLP or BCBA. No professional-client relationship is established through our programs unless an explicit, written agreement specifying a supervisory or consultative clinical relationship has been signed by both parties.' },
+        { h: 'For Families and Non-Professionals', p: 'Content and programs that may be directed toward parents or caregivers are intended to provide information, strategies, and skills to support the people in their care. This is not a substitute for individualized evaluation or treatment by a licensed professional. We encourage all families to work with qualified, licensed practitioners in their community.' },
+        { h: 'Jurisdiction Note', p: 'Speech & ABA Works serves participants internationally. Scope of practice regulations vary by jurisdiction. Participants are responsible for understanding and complying with the scope of practice rules that govern their own professional licensure in their location.' },
+        { h: 'Questions', p: `If you have any questions about whether a particular Speech & ABA Works service is appropriate for your situation, please contact us at ${site.email} before purchasing.` },
+      ] as readonly Section[],
     },
   },
 
   zh: {
     privacy: {
       title: '隱私權政策',
-      lede: '這個網站蒐集什麼、為什麼蒐集、以及之後會怎麼處理。內容很短，因為真的沒有多少。',
+      intro: 'Speech & ABA Works LLC（以下稱「我們」）經營 speechabaworks.com 網站（以下稱「本服務」）。Speech & ABA Works LLC 是一個線上教育、督導與諮詢平台，為言語治療師、行為分析師、特殊教育工作者與家庭提供訓練、資源與專業發展。',
       sections: [
-        ['網站自動蒐集什麼', '沒有任何能識別你身分的資料。本站使用保護隱私的分析工具，只計算頁面瀏覽次數，不使用 cookie，也不會建立你的個人輪廓——這也是為什麼你不會看到 cookie 同意橫幅。'],
-        ['你主動提供的資料', '如果你送出諮詢訊息，我會收到你的姓名、電子郵件、你選擇的身分別與訊息內容。如果你索取免費指南，我會收到你的姓名與電子郵件，並將你加入電子報名單。'],
-        ['我如何使用這些資料', '回覆你；如果你訂閱了指南，則寄送該指南與不定期的專欄文章。我不會販售、出租或分享你的資料給任何人，也不會用來在其他平台對你投放廣告。'],
-        ['保留多久', '諮詢訊息會保留在我的信箱中，直到專業關係或相關紀錄保存義務結束為止。電子報名單則保留到你退訂為止——每封信底部都可以退訂。'],
-        ['你的權利', `你可以來信 ${site.email}，詢問我持有你的哪些資料、要求更正，或要求刪除。我會確實處理。`],
-        ['第三方服務', '表單傳送、電子郵件平台與分析工具由第三方供應商提供，各自僅處理上述資料。本站沒有載入其他任何第三方追蹤程式。'],
-      ],
+        {
+          h: '我們蒐集哪些資料',
+          p: '我們可能蒐集下列類型的個人資料：',
+          items: [
+            '聯絡資料：您在填寫聯絡或諮詢表單時提供的姓名、電子郵件地址及其他內容',
+            '付款資料：帳單姓名、地址與付款資訊，均透過第三方金流服務商（例如 PayPal）安全處理。我們不會儲存您完整的信用卡資料。',
+            '使用資料：IP 位址、瀏覽器類型、造訪的頁面，以及在本站停留的時間，透過 cookie 與分析工具（例如 Google Analytics）蒐集',
+            '通訊內容：您直接寄送給我們的電子郵件、訊息或任何內容',
+            '課程與方案資料：已購買課程或方案的報名紀錄、進度與完成情形',
+          ],
+        },
+        {
+          h: '我們如何使用您的資料',
+          p: '我們使用您的資料，以便：',
+          items: [
+            '提供您已購買或申請的服務、課程或諮詢',
+            '就您的報名、帳戶或諮詢事項與您聯繫',
+            '寄送推廣郵件或電子報（僅在取得您同意的情況下；您可隨時取消訂閱）',
+            '改善我們的網站、內容與服務',
+            '遵循法令義務',
+          ],
+        },
+        {
+          h: '我們如何分享您的資料',
+          p: '我們不會販售您的個人資料。我們可能與下列對象分享資料：',
+          items: [
+            '支援我們營運的第三方服務供應商（例如金流服務商、電子郵件平台、課程代管平台），且該等供應商均負有保密義務',
+            '依法要求或為保護我們權利之必要時，向主管機關提供',
+          ],
+        },
+        { h: 'Cookie', p: '本網站使用 cookie 以改善您的瀏覽體驗並蒐集分析資料。您可以透過瀏覽器設定停用 cookie；惟停用後，本網站部分功能可能無法正常運作。' },
+        { h: '資料保存', p: '我們保存您的個人資料，以達成本政策所述目的所必要之期間為限，或依適用法令之規定辦理。' },
+        { h: '您的權利', p: `依您所在地區的規定，您可能享有查閱、更正、刪除或限制使用您個人資料的權利。如欲行使上述權利，請來信 ${site.email}。我們將於 30 日內回覆。` },
+        { h: '兒童隱私', p: '我們的服務對象為成年人（18 歲以上）與專業人員。我們不會在知情的情況下蒐集未滿 18 歲者的個人資料。' },
+        { h: '國際使用者', p: 'Speech & ABA Works LLC 的服務對象遍及北美、歐洲、亞洲、澳洲及其他地區。使用本網站與服務，即表示您同意依本政策處理您的資料。若您所在的司法管轄區訂有特定的資料保護法規（例如 GDPR、PIPEDA、PDPO），請與我們聯繫，以討論您的資料如何處理。' },
+        { h: '政策變更', p: '我們可能不定期更新本隱私權政策。變更內容將公告於本頁，並更新生效日期。於變更後繼續使用本網站，即視為接受更新後的政策。' },
+        {
+          h: '無障礙標準與替代取用方式',
+          p: '我們致力於符合全球資訊網協會（W3C）發布的網頁內容無障礙指引（WCAG）2.1 AA 等級。該指引說明如何讓網頁內容對身心障礙者更為友善。若您在 speechabaworks.com 上遇到無法取用的內容，或需要其他格式的素材，歡迎與我們聯繫。我們很樂意提供：',
+          items: [
+            '視覺內容或課程教材的文字版本',
+            'PDF 或可下載文件的無障礙替代方案',
+            '支持您參與任何服務或方案的調整措施',
+          ],
+        },
+        { h: '聯絡我們', p: `如對本隱私權政策有任何疑問，請聯繫：${site.email} ｜ ${site.domain}` },
+      ] as readonly Section[],
     },
+
     terms: {
       title: '服務條款',
-      lede: '透過本網站預約的諮詢、指導與訓練服務所適用的條款。',
+      intro: '',
       sections: [
-        ['服務內容', '諮詢、指導、專業發展與訓練，除另有書面約定外皆以遠距方式提供。服務對象包括專業人員、機構與家庭。'],
-        ['預約與付款', '費用於預約時支付。收費依服務頁面所公告之標準，團體與機構合作則依書面約定。不接受保險給付。'],
-        ['取消規定', '諮詢開始前 24 小時以上可免費改期或取消。24 小時內取消者，可能仍需支付全額費用。'],
-        ['關係的範圍', '諮詢與指導服務不構成臨床人員與病患的關係，也不構成對任何特定兒童的診斷、評估或治療。詳見服務免責聲明。'],
-        ['保密', '你所分享的個案素材將以保密方式處理。分享前請先去除個案的可識別資訊。若依法負有通報義務，該義務優先。'],
-        ['智慧財產', '所提供的教材、講義與架構之智慧財產權仍屬 Speech & ABA Works 所有，並授權你用於自身的專業實務。未經書面同意，不得轉售或作為訓練教材再散布。'],
-        ['條款變更', '本條款可能更新。以你預約當時本頁公告的版本為準。'],
-      ],
+        { h: '條款之同意', p: '當您存取或使用 speechabaworks.com（以下稱「本服務」）、購買任何課程、方案或服務，或以其他方式與 Speech & ABA Works LLC（以下稱「我們」）往來時，即表示您同意受本服務條款之拘束。若您不同意，請勿使用本網站或本服務。' },
+        { h: '服務說明', p: 'Speech & ABA Works LLC 為言語治療師、行為分析師、特殊教育工作者與家庭，提供線上教育課程、專業發展訓練、督導方案與諮詢服務。所有內容僅供資訊與教育之用。' },
+        { h: '非專業或臨床服務', p: '本網站及 Speech & ABA Works LLC 任何方案中的內容，均不構成言語治療、應用行為分析治療、心理服務、醫療建議，或任何其他需執照之專業服務。除另有書面協議明確約定外，使用 Speech & ABA Works LLC 的內容並不建立臨床人員與個案之關係。' },
+        {
+          h: '購買與付款',
+          items: [
+            '除另有註明外，所有價格均以美元（USD）計價。',
+            '費用於購買時支付。我們透過安全的第三方金流服務商接受主要信用卡與 PayPal 付款。',
+            '您需自行負擔所在地區適用的稅賦。',
+          ],
+        },
+        { h: '退款政策', p: `因本產品屬數位性質，所有交易原則上不予退款。於購買後 7 日內，且課程或內容尚未被實質取用者，我們可就個案情形考慮退款。如欲申請退款，請聯繫 ${site.email}。我們保留依自身判斷拒絕退款申請之權利。` },
+        { h: '智慧財產權', p: '本網站所有內容，包括課程教材、講義、圖像、影片、書面指南與品牌識別，均為 Speech & ABA Works LLC 與周璧盈（Linda Chow）之智慧財產。未經書面同意，您不得重製、散布、轉售或分享本網站內容。為您個人專業學習之非商業使用則予以允許。' },
+        {
+          h: '使用者行為規範',
+          p: '您同意不從事下列行為：',
+          items: [
+            '與他人分享課程登入憑證或課程內容',
+            '未取得授權協議即將我們的內容用於商業轉售或訓練方案',
+            '不實陳述我們的內容、品牌或服務範圍',
+            '對我們的團隊或社群成員從事辱罵、騷擾或不尊重之行為',
+          ],
+        },
+        { h: '免除擔保', p: 'Speech & ABA Works LLC 以「現況」提供所有內容與服務，不提供任何明示或默示之擔保。我們不保證參與本方案可獲致特定的專業、臨床或組織成果。' },
+        {
+          h: '責任限制',
+          items: [
+            '本網站之任何內容均不構成，亦無意構成任何形式的法律、財務或醫療建議。若您需要相關建議，應諮詢適當的專業人士。',
+            '本節以下條款於適用法令允許之最大範圍內適用，且不限制或排除我們在法律上不得限制或排除之責任。在任何情況下，我們均不就您或任何第三方因存取或使用本網站所生之直接或間接損害負責，包括利潤損失、收入損失、資料、軟體或資料庫之毀損，以及財產或資料之滅失或損害。',
+            '除另有契約明文約定外，我們就本網站，或透過本網站行銷或販售之任何產品與服務所生或與之相關之全部損害，對您所負之最高責任，不論該責任係基於契約、衡平、過失、故意行為、侵權或其他法律形式，均以您為購買該等產品或服務、或使用本網站而支付予我們之總金額為限。此一上限適用於您所有各類請求、訴訟與訴因之總和。',
+          ],
+        },
+        { h: '準據法', p: '本條款應依 Speech & ABA Works LLC 註冊所在之適用司法管轄區法律解釋與適用。任何爭議應先經善意協商解決；必要時，則循具拘束力之仲裁或該適用司法管轄區之法院解決。' },
+        { h: '條款變更', p: '我們保留隨時更新本條款之權利。更新後的條款將公告於本頁。於更新後繼續使用本服務，即視為接受。' },
+        { h: '聯絡我們', p: `如對本服務條款有任何疑問，請聯繫：${site.email} ｜ ${site.domain}` },
+      ] as readonly Section[],
     },
+
     disclaimer: {
       title: '服務免責聲明',
-      lede: '這些服務是什麼——以及同樣重要的，它們不是什麼。',
+      intro: '使用本網站（speechabaworks.com）即表示您同意本免責聲明並接受其條款。',
       sections: [
-        ['是諮詢，不是治療', '本網站提供的是專業諮詢、指導與訓練服務。它們不是直接的語言治療、不是對個案執行的應用行為分析服務，也不能取代兩者中的任何一項。'],
-        ['不提供診斷或評估', '此處提供的任何內容都不構成診斷性評估、正式評量，或針對特定兒童的臨床建議。關於個別孩子的決策，仍屬於該名孩子的治療團隊與家庭。'],
-        ['不建立臨床人員與病患關係', '使用本服務不會建立臨床人員與病患、或治療師與個案的關係，也不會產生對任何個人的持續臨床責任。'],
-        ['專業判斷仍在你身上', '如果你是實務工作者，你仍須為自己的臨床決策、執照範圍，以及對主管機關與雇主的遵循義務負責。'],
-        ['網站上的內容', '文章、指南與資源皆為一般性的教育素材，並未針對任何個人量身設計；套用之前，請先對眼前這個孩子做出專業判斷。'],
-        ['緊急狀況', '若你對孩子的安全、健康或福祉有緊急疑慮，請直接聯繫當地的緊急服務或兒少保護單位，不要等待諮詢。'],
-      ],
+        {
+          h: '服務範圍',
+          items: [
+            '言語治療與應用行為分析架構的線上課程與訓練，對象為專業人員與家庭',
+            '為言語治療師、行為分析師與特殊教育工作者提供專業督導與諮詢，協助其發展跨專業實務能力',
+            '為家庭提供家長指導與諮詢，提供資訊、策略與技巧，以支持其所照顧的對象。此不能取代由領有執照之專業人員所進行的個別化評估或治療。我們鼓勵所有家庭與所在社區中合格且領有執照的實務工作者合作',
+            '與溝通、輔助溝通（AAC）、行為及文化回應實務相關的教育資源、指南與內容',
+            '於註明之情況下，提供符合 CEU／PDU 資格的專業發展方案',
+          ],
+        },
+        {
+          h: 'Speech & ABA Works 並非臨床服務提供者',
+          p: '具體而言：',
+          items: [
+            '我們不提供言語治療的評估、診斷或治療',
+            '我們不提供應用行為分析的評估或治療',
+            '我們不提供心理服務或心理健康支持',
+            '我們不提供任何形式的醫療建議',
+            '購買或參與課程與訓練方案，並不建立治療關係或督導關係',
+          ],
+        },
+        { h: '關於顧問', p: '本顧問持有有效的言語語言病理學家執照（CCC-SLP, ASHA）與國際認證行為分析師資格（BCBA, BACB）。這些專業資格構成 Speech & ABA Works 內容在品質與臨床基礎上的依據。您所獲得的諮詢或督導，均在本顧問於言語語言病理學與應用行為分析領域之專業範圍與能力之內提供。惟本顧問以 Speech & ABA Works 名義提供諮詢或督導時，並非擔任您的言語治療師或行為分析師。除非雙方已簽署明確載明督導或諮詢性臨床關係之書面協議，否則本方案不建立任何專業人員與個案之關係。' },
+        { h: '給家庭與非專業人員', p: '針對家長或照顧者的內容與方案，旨在提供資訊、策略與技巧，以支持其所照顧的對象。此不能取代由領有執照之專業人員所進行的個別化評估或治療。我們鼓勵所有家庭與所在社區中合格且領有執照的實務工作者合作。' },
+        { h: '司法管轄區說明', p: 'Speech & ABA Works 的參與者來自世界各地。執業範圍的相關法規因司法管轄區而異。參與者應自行了解並遵循其所在地區規範自身專業執照的執業範圍規定。' },
+        { h: '疑問', p: `若您對於某項 Speech & ABA Works 服務是否適合您的情況有任何疑問，請於購買前來信 ${site.email} 與我們聯繫。` },
+      ] as readonly Section[],
     },
   },
 } as const;
@@ -92,17 +275,25 @@ const copy = {
 const c = copyFor(copy, lang)[doc];
 ---
 
-<PageHeader title={c.title} lede={c.lede}>
-  <p class="small muted">{copyFor(updated, lang)}</p>
+<PageHeader title={c.title}>
+  <p class="small muted">{copyFor(effective, lang)}</p>
 </PageHeader>
 
 <section class="band">
   <div class="shell">
+    {c.intro && <p class="legal-intro">{c.intro}</p>}
     <ol class="legal">
-      {c.sections.map(([h, b]) => (
+      {c.sections.map((s) => (
         <li class="clause">
-          <h2>{h}</h2>
-          <p>{b}</p>
+          <h2>{s.h}</h2>
+          <div class="clause-body">
+            {s.p && <p>{s.p}</p>}
+            {s.items && (
+              <ul>
+                {s.items.map((it) => <li>{it}</li>)}
+              </ul>
+            )}
+          </div>
         </li>
       ))}
     </ol>
@@ -114,6 +305,7 @@ const c = copyFor(copy, lang)[doc];
 </section>
 
 <style>
+  .legal-intro { color: var(--ink-soft); font-size: .9375rem; max-width: 46rem; padding-block: 0 1.5rem; }
   .legal { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; counter-reset: clause; }
   .legal li { max-width: none; }
   .clause {
@@ -136,6 +328,19 @@ const c = copyFor(copy, lang)[doc];
   }
   .clause h2 { font-size: var(--t-1); font-weight: 600; }
   .clause p { color: var(--ink-soft); font-size: .9375rem; }
+  .clause-body > * + * { margin-top: .65rem; }
+  .clause-body ul {
+    margin: 0;
+    padding-left: 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: .45rem;
+  }
+  .clause-body ul li {
+    color: var(--ink-soft);
+    font-size: .9375rem;
+    line-height: 1.6;
+  }
   @media (max-width: 34rem) {
     .clause { grid-template-columns: 1fr; }
     .clause::before { grid-row: auto; padding-top: 0; }

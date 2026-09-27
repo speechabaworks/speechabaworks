@@ -5,7 +5,7 @@ const { lang } = Astro.props;
 
 const copy = {
   en: { left: 'Speech-Language Pathology', right: 'Applied Behavior Analysis', middle: 'One integrated plan' },
-  zh: { left: '語言治療 SLP', right: '應用行為分析 ABA', middle: '一份整合計畫' },
+  zh: { left: '言語治療 SLP', right: '應用行為分析 ABA', middle: '一份整合計畫' },
 } as const;
 const c = copyFor(copy, lang);
 ---
@@ -14,7 +14,7 @@ const c = copyFor(copy, lang);
   <svg viewBox="0 0 340 236" role="img" aria-labelledby="venn-title" class="venn-svg">
     <title id="venn-title">
       {isZh(lang)
-        ? '語言治療與應用行為分析兩個圓的交集，代表一份整合的溝通計畫。'
+        ? '言語治療與應用行為分析兩個圓的交集，代表一份整合的溝通計畫。'
         : 'Two overlapping circles — speech-language pathology and applied behavior analysis — meeting in one integrated communication plan.'}
     </title>
 

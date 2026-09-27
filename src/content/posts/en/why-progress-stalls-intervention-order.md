@@ -135,7 +135,7 @@ Using a skill with different examples, different people, in different places and
 
 ### How do speech therapy and ABA work on this together?
 
-The speech therapist defines what to teach — the language and social communication content. The behavior analyst provides how to teach it — the teaching sequence, prompting and fading, and data. Agreeing the order together is where collaboration starts. I wrote more about this in [How Speech and ABA Therapy Work Together](/blog/how-speech-and-aba-therapy-work-together/).
+The speech therapist brings content expertise in language and social communication. The behavior analyst brings expertise in the science of learning and behavior, including teaching sequences, prompting and fading, and data. Both are trained in what to teach and in how to teach it, so this is a difference of depth rather than of role. Agreeing the order together is where collaboration starts. I wrote more about this in [How Speech and ABA Therapy Work Together](/blog/how-speech-and-aba-therapy-work-together/).
 
 ---
 

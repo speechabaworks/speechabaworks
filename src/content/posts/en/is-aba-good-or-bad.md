@@ -50,7 +50,7 @@ I did not come to this as an ABA enthusiast. I qualified as a speech-language pa
 
 What I noticed was that autistic children learned language in a distinctly different way. When I used a developmental language framework alone, it did not explain their pattern of strengths and difficulties, and my own assessment and intervention framework clearly had gaps in it.
 
-At that time, hardly any of my colleagues talked about ABA. In early childhood settings and in graduate programs it was often treated as the opposing camp, criticised for being rigid and for using food as reinforcement, so I did not go looking for it either.
+At that time, hardly any of my colleagues talked about ABA. In early childhood settings and in graduate programs it was often treated as the opposing camp, criticized for being rigid and for using food as reinforcement, so I did not go looking for it either.
 
 Then I worked in a school alongside two excellent BCBAs. They were glad to work with a speech therapist, and they were very good at solving the behavior problems I was stuck on. It opened my eyes.
 

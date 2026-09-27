@@ -24,7 +24,7 @@ A speech-language pathologist (SLP) and a Board Certified Behavior Analyst (BCBA
 | Uses play and daily routines to grow spontaneous language, joint attention and peer interaction | Uses reinforcement, structured teaching and natural-environment teaching to build and generalize skills |
 | Addresses articulation and feeding concerns | Tracks data so the team knows what is working |
 
-Read the table again and notice how few rows are in competition. The SLP decides *what* to teach and *why it matters for language*. The behavior analyst brings the science of *how* a child learns it and keeps it. Put the two in the same room and the plan gets sharper on both sides.
+Read the table again and notice how few rows are in competition. Both professions are trained in what to teach and in how to teach it; what differs is where the depth of that training sits. The speech-language pathologist holds the content expertise in speech, language and communication. The behavior analyst holds the expertise in the science of learning and behavior, and in how behavior interacts with the environment. Put the two in the same room and the plan gets sharper on both sides.
 
 ## Motivation comes first
 

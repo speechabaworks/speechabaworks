@@ -2,7 +2,7 @@
 title: 跨领域合作检核表
 order: 10
 summary: 一份用于团队会议的检核表，把「我们应该多合作」变成一个个真的答得出来的问题——关于价值观、角色分工、专业术语，以及你们究竟是在协调，还是只是各自平行地上课。
-forWhom: 共同服务同一群个案的语言治疗师、BCBA 与特教老师
+forWhom: 共同服务同一群个案的言语治疗师、BCBA 与特教老师
 gated: true
 file: /files/interprofessional-collaboration-checklist-zh.pdf
 formId: collaboration-checklist
