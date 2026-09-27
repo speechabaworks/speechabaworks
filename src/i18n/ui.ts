@@ -64,7 +64,7 @@ export const site = {
     instagram: 'https://www.instagram.com/speechabaworks/',
     threads: 'https://www.threads.com/@speechabaworks',
     linkedin: 'https://www.linkedin.com/in/lindacpy',
-    facebook: 'https://www.facebook.com/speechabaworks',
+    facebook: '',
     rednote: 'https://xhslink.cn/m/9GwZDMmWqUS',
   } as Record<'instagram' | 'threads' | 'linkedin' | 'facebook' | 'rednote', string>,
   stats: [

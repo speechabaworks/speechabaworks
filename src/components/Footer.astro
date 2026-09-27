@@ -8,12 +8,16 @@ const t = useTranslations(lang);
 const year = new Date().getFullYear();
 
 /* Rendered in this order; any handle left blank in site.social is skipped. */
+const rednoteLabel = lang === 'en' ? 'RedNote'
+  : lang === 'zh-hant' ? '小紅書'
+  : '小红书';
+
 const socials = ([
   ['instagram', 'Instagram'],
   ['threads', 'Threads'],
   ['linkedin', 'LinkedIn'],
   ['facebook', 'Facebook'],
-  ['rednote', isZh(lang) ? '小紅書' : 'RedNote'],
+  ['rednote', rednoteLabel],
 ] as const).filter(([key]) => site.social[key]);
 ---
 
@@ -59,9 +63,6 @@ const socials = ([
         <h2 class="footer-head">{t('footer.connect')}</h2>
         <ul>
           <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
-          {socials.map(([key, label]) => (
-            <li><a href={site.social[key]} rel="me noopener" target="_blank">{label}</a></li>
-          ))}
           <li><a href="/rss.xml">RSS</a></li>
         </ul>
       </div>
