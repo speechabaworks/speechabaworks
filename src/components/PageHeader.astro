@@ -3,12 +3,16 @@ interface Props {
   eyebrow?: string;
   title: string;
   lede?: string;
+  /* 'wide' matches the content column used by most pages. Pages whose body
+     sits in the narrower .shell (FAQs, legal notices) pass 'page' so the
+     heading keeps lining up with the text beneath it. */
+  width?: 'wide' | 'page';
 }
-const { eyebrow, title, lede } = Astro.props;
+const { eyebrow, title, lede, width = 'wide' } = Astro.props;
 ---
 
 <div class="page-header">
-  <div class="shell">
+  <div class:list={['shell', width === 'wide' && 'shell--wide']}>
     <div class="page-header-inner">
       {eyebrow && <p class="eyebrow">{eyebrow}</p>}
       <h1>{title}</h1>

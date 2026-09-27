@@ -23,7 +23,10 @@ const t = useTranslations(lang);
   .statband-inner {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    margin: 0;
+    /* margin-block only: `margin: 0` would cancel the `margin-inline: auto`
+       that .shell uses to centre the content column, which pinned the stats
+       to the window edge instead of aligning them with the hero. */
+    margin-block: 0;
     padding-block: 0;
   }
   @media (max-width: 48rem) {
