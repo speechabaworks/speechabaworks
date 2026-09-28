@@ -9,6 +9,9 @@ import {
 
 interface Props {
   title: string;
+  /* 'suffix' appends the brand (the default). 'none' uses `title` verbatim,
+     for pages that need the full 60 characters of a search result. */
+  titleMode?: 'suffix' | 'none';
   description: string;
   /** Which page this is, so the language switcher and hreflang tags line up. */
   routeKey?: RouteKey;
@@ -20,7 +23,7 @@ interface Props {
   noindex?: boolean;
 }
 
-const { title, description, routeKey, altHrefs, ogType = 'website', image, noindex = false } = Astro.props;
+const { title, titleMode = 'suffix', description, routeKey, altHrefs, ogType = 'website', image, noindex = false } = Astro.props;
 
 const lang: Lang = langFromUrl(Astro.url);
 /* The host serves every page at its trailing-slash address (/blog/post/) and
@@ -39,7 +42,9 @@ const switcher = alternates.filter((a) => a.lang !== lang);
 const tagline = isZh(lang)
   ? '言語治療與應用行為分析整合諮詢'
   : 'SLP–ABA Integration Consulting';
-const fullTitle = title === site.name ? `${site.name} — ${tagline}` : `${title} · ${site.name}`;
+const fullTitle = titleMode === 'none'
+  ? title
+  : title === site.name ? `${site.name} — ${tagline}` : `${title} · ${site.name}`;
 ---
 
 <!doctype html>
