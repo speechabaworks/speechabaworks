@@ -33,6 +33,11 @@ const altHrefs = allLangs
   altHrefs={altHrefs}
   ogType="article"
   image={post.data.hero}
+  article={{
+    datePublished: post.data.pubDate,
+    dateModified: post.data.updatedDate,
+    section: post.data.tags?.[0],
+  }}
 >
   <BlogPost
     lang={LANG}
