@@ -3,6 +3,8 @@ title: 兒童言語失用症：當孩子開始抗拒練習
 description: DTTC 等言語失用症治療方法，成效都取決於準確重複的次數。當孩子開始逃避練習，進展就會停住。本文說明這件事為什麼會發生，以及什麼能改變它。
 pubDate: 2026-09-25
 tags: ["兒童言語失用症", "動作言語障礙", "言語治療與 ABA", "給家長"]
+hero: /images/blog/apraxia-cover-zh-hant.png
+heroAlt: "兒童言語失用症：當孩子開始抗拒練習"
 draft: false
 ---
 

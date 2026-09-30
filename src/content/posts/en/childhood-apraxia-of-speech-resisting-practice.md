@@ -3,6 +3,8 @@ title: "Childhood Apraxia of Speech: When Your Child Resists Practice"
 description: DTTC and other apraxia treatments depend on a high number of accurate repetitions. When a child avoids practice, progress stalls. Here is why that happens and what changes it.
 pubDate: 2026-09-25
 tags: ["Childhood apraxia of speech", "Motor speech disorders", "Speech and ABA therapy", "For parents"]
+hero: /images/blog/apraxia-cover-en.png
+heroAlt: "Childhood apraxia of speech: when your child resists practice"
 draft: false
 ---
 

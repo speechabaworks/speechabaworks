@@ -67,6 +67,12 @@ export const site = {
     facebook: '',
     rednote: 'https://xhslink.cn/m/9GwZDMmWqUS',
   } as Record<'instagram' | 'threads' | 'linkedin' | 'facebook' | 'rednote', string>,
+  /* Google Business Profile. `google` is the listing itself, which search
+     engines read as another record of the same business. `googleReview`
+     opens the write-a-review box directly and is the link to hand to a
+     family who has offered to leave one. Blank hides both. */
+  google: 'https://g.page/r/CTpLlMp4HLgIEBM',
+  googleReview: 'https://g.page/r/CTpLlMp4HLgIEBM/review',
   stats: [
     { value: '20+', key: 'stat.years' },
     { value: '1,000+', key: 'stat.children' },

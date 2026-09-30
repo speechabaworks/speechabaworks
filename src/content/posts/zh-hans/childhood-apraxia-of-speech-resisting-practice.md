@@ -3,6 +3,8 @@ title: 儿童言语失用症：当孩子开始抗拒练习
 description: DTTC 等言语失用症治疗方法，成效都取决于准确重复的次数。当孩子开始逃避练习，进展就会停住。本文说明这件事为什么会发生，以及什么能改变它。
 pubDate: 2026-09-25
 tags: ["儿童言语失用症", "动作言语障碍", "言语治疗与 ABA", "给家长"]
+hero: /images/blog/apraxia-cover-zh-hans.png
+heroAlt: "儿童言语失用症：当孩子开始抗拒练习"
 draft: false
 ---
 

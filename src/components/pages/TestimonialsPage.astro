@@ -2,7 +2,7 @@
 import PageHeader from '../PageHeader.astro';
 import CtaBand from '../CtaBand.astro';
 import TestimonialCard from '../TestimonialCard.astro';
-import { type Lang, copyFor } from '../../i18n/ui';
+import { type Lang, copyFor, site } from '../../i18n/ui';
 import { byLang, sortByOrder } from '../../lib/content';
 
 interface Props { lang: Lang }
@@ -15,11 +15,15 @@ const copy = {
     eyebrow: 'Testimonials',
     title: 'What colleagues and families say',
     lede: 'Supervisors, clinicians, educators and a parent I have worked with, in their own words. Testimonies written in Chinese appear here in English translation, with the original one click away.',
+    reviewLead: 'Worked with me? A review on Google helps other families find this practice.',
+    reviewLink: 'Leave a review on Google',
   },
   zh: {
     eyebrow: '真實回饋',
     title: '同業與家長的回饋',
     lede: '與我合作過的督導、臨床人員、教師與家長親筆寫下的回饋。以英文撰寫的回饋附有中文翻譯，並可查看原文。',
+    reviewLead: '曾經與我合作過嗎？在 Google 留下一段回饋，能幫助更多家庭找到這裡。',
+    reviewLink: '前往 Google 留下回饋',
   },
 } as const;
 const c = copyFor(copy, lang);
@@ -35,6 +39,13 @@ const c = copyFor(copy, lang);
       ))}
     </ul>
   </div>
+
+  {site.googleReview && (
+    <p class="reviewnote shell">
+      {c.reviewLead}{' '}
+      <a href={site.googleReview} target="_blank" rel="noopener">{c.reviewLink}</a>
+    </p>
+  )}
 </section>
 
 <CtaBand lang={lang} />
@@ -49,4 +60,16 @@ const c = copyFor(copy, lang);
     align-items: start;
   }
   .tgrid li { max-width: none; }
+
+  /* Deliberately quiet: this is an invitation at the foot of the page, not a
+     call to action competing with the band below it. */
+  .reviewnote {
+    margin-block: 2.5rem 0;
+    font-size: 0.9375rem;
+    color: var(--muted);
+    text-align: center;
+    text-wrap: balance;
+  }
+  .reviewnote a { color: inherit; text-underline-offset: 0.2em; }
+  .reviewnote a:hover { color: var(--ink); }
 </style>
