@@ -166,6 +166,7 @@ async function handleSubscribe(request: Request, env: Env): Promise<Response> {
   const name = String(form.get('name') ?? '').trim();
   const email = String(form.get('email') ?? '').trim();
   const list = String(form.get('list') ?? 'general');
+  const docLang = String(form.get('docLang') ?? '') === 'zh-hant' ? 'Traditional Chinese' : 'English';
 
   if (!name || !email || !email.includes('@')) {
     return json({ ok: false, message: m.invalid }, 400);
@@ -183,8 +184,8 @@ async function handleSubscribe(request: Request, env: Env): Promise<Response> {
   await sendEmail(env, {
     from: env.NOTIFY_FROM ?? DEFAULT_FROM,
     to: [env.NOTIFY_TO ?? DEFAULT_TO],
-    subject: `New signup: ${list}`,
-    html: `<p><strong>${esc(name)}</strong> &lt;${esc(email)}&gt; requested <strong>${esc(list)}</strong> (${lang}).</p>`,
+    subject: `New signup: ${list} (${docLang})`,
+    html: `<p><strong>${esc(name)}</strong> &lt;${esc(email)}&gt; requested <strong>${esc(list)}</strong> in <strong>${esc(docLang)}</strong> (page language: ${lang}).</p>`,
   });
 
   // Add to the mailing list, if an email platform is wired up.
@@ -200,7 +201,7 @@ async function handleSubscribe(request: Request, env: Env): Promise<Response> {
         body: JSON.stringify({
           email_address: email,
           fields: { FirstName: name },
-          tags: [list, `lang:${lang}`],
+          tags: [list, `lang:${lang}`, `doc:${docLang === 'English' ? 'en' : 'zh-hant'}`],
           status: 'subscribed',
         }),
       });

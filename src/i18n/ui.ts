@@ -182,6 +182,9 @@ const strings = {
 
     'signup.heading': 'Get the guide',
     'signup.button': 'Send it to me',
+    'signup.docLang': 'Which language would you like it in?',
+    'signup.docLangEn': 'English',
+    'signup.docLangZh': '繁體中文 (Traditional Chinese)',
     'signup.consent': 'You will receive the guide and occasional writing on SLP–ABA collaboration. Unsubscribe any time.',
 
     'testimonials.heading': 'What colleagues and families say',
@@ -254,6 +257,9 @@ const strings = {
 
     'signup.heading': '索取免費指南',
     'signup.button': '寄給我',
+    'signup.docLang': '想收到哪一個語言版本？',
+    'signup.docLangEn': 'English（英文）',
+    'signup.docLangZh': '繁體中文',
     'signup.consent': '你將收到這份指南，以及不定期的 SLP–ABA 協作專欄。隨時可以取消訂閱。',
 
     'testimonials.heading': '同業與家長的回饋',
