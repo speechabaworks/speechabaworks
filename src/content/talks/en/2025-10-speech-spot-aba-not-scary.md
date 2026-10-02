@@ -5,4 +5,6 @@ date: 2025-10-01
 kind: podcast
 location: Cantonese
 summary: For Chinese-speaking parents and clinicians who have heard only the worst of ABA. What the science actually claims, what it does not, and where the legitimate criticism lands.
+image: /images/talk-bsp12.jpg
+imageAlt: Bilingual Speech SPOT episode 12 cover art, featuring Linda Chow, CCC-SLP and BCBA
 ---

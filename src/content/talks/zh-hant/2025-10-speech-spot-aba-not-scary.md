@@ -5,4 +5,6 @@ date: 2025-10-01
 kind: podcast
 location: 廣東話
 summary: 寫給只聽過 ABA 負面說法的華語家長與臨床工作者。這門科學實際主張什麼、不主張什麼，以及哪些批評是真正站得住腳的。
+image: /images/talk-bsp12.jpg
+imageAlt: Bilingual Speech SPOT 第 12 集封面，來賓為 Linda Chow，CCC-SLP、BCBA
 ---
