@@ -6,5 +6,5 @@ kind: workshop
 location: 美國紐約
 summary: 為週末中文學校的老師設計的班級策略。這樣的場域裡，教學人員多半是沒有特教背景的志工，而教室裡孩子的需求差異卻很大。
 image: /images/talk-pd-classroom.jpg
-imageAlt: 教育工作者參與專業發展課程。
+imageAlt: Linda 於紐約慈濟人文學校帶領教師專業培訓，身後螢幕為神經多樣性主題投影片
 ---
