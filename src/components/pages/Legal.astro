@@ -79,10 +79,19 @@ const copy = {
           items: [
             'All prices are listed in U.S. dollars (USD) unless otherwise noted.',
             'Payment is due at the time of purchase. We accept major credit cards and PayPal through secure third-party processors.',
+            'For consultation appointments only: payment must be received at least 24 hours before the scheduled appointment, or the appointment will be cancelled. Payment instructions will be provided after a booking is made.',
             'You are responsible for any applicable taxes based on your location.',
           ],
         },
-        { h: 'Refund Policy', p: `Due to the digital nature of our products, all sales are generally final. Refunds may be considered on a case-by-case basis within 7 days of purchase, provided the course or content has not been substantially accessed. To request a refund, contact ${site.email}. We reserve the right to decline refund requests at our discretion.` },
+        {
+          h: 'Refund and Rescheduling Policies',
+          p: `Due to the digital nature of our products, all sales are generally final. Refunds may be considered on a case-by-case basis within 7 days of purchase, provided the course or content has not been substantially accessed, and may be requested by contacting ${site.email}. We reserve the right to decline refund requests at our discretion. The following applies to consultation appointments:`,
+          items: [
+            'Notice to cancel or reschedule must be received at least 2 hours before the scheduled start time.',
+            'An appointment missed without notice, or cancelled less than 2 hours before the start time, is treated as a no-show and is not refunded.',
+            'Each booking may be rescheduled up to 2 times.',
+          ],
+        },
         { h: 'Intellectual Property', p: 'All content on this website, including course materials, handouts, graphics, videos, written guides, and branding, is the intellectual property of Speech & ABA Works LLC and Linda Chow. You may not reproduce, distribute, resell, or share our content without written permission. Personal, non-commercial use for your own professional learning is permitted.' },
         {
           h: 'User Conduct',
@@ -208,10 +217,19 @@ const copy = {
           items: [
             '除另有註明外，所有價格均以美元（USD）計價。',
             '費用於購買時支付。我們透過安全的第三方金流服務商接受主要信用卡與 PayPal 付款。',
+            '僅限諮詢預約：費用須於預約時間至少 24 小時前完成支付，否則該次預約將被取消。付款方式將於完成預約後提供。',
             '您需自行負擔所在地區適用的稅賦。',
           ],
         },
-        { h: '退款政策', p: `因本產品屬數位性質，所有交易原則上不予退款。於購買後 7 日內，且課程或內容尚未被實質取用者，我們可就個案情形考慮退款。如欲申請退款，請聯繫 ${site.email}。我們保留依自身判斷拒絕退款申請之權利。` },
+        {
+          h: '退款與改期政策',
+          p: `因本產品屬數位性質，所有交易原則上不予退款。於購買後 7 日內，且課程或內容尚未被實質取用者，我們可就個案情形考慮退款，申請請來信 ${site.email}。我們保留依自身判斷拒絕退款申請之權利。以下規定適用於諮詢預約：`,
+          items: [
+            '取消或改期的通知，須於預約開始時間至少 2 小時前送達。',
+            '未事先通知而未出席，或於開始時間前不足 2 小時才取消者，視同未出席，不予退款。',
+            '每筆預約最多可改期 2 次。',
+          ],
+        },
         { h: '智慧財產權', p: '本網站所有內容，包括課程教材、講義、圖像、影片、書面指南與品牌識別，均為 Speech & ABA Works LLC 與周璧盈（Linda Chow）之智慧財產。未經書面同意，您不得重製、散布、轉售或分享本網站內容。為您個人專業學習之非商業使用則予以允許。' },
         {
           h: '使用者行為規範',
